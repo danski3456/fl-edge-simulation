@@ -1,0 +1,52 @@
+stages:
+  download_data:
+    cmd: python src/setup/download_dataset.py 
+    deps:
+      - src/datasets
+      - src/setup/download_dataset.py
+    outs:
+      - assets/raw_datasets/${dataset_name}
+    params:
+      - dataset_name
+  original_assignment:
+    cmd: python src/setup/generate_assignment.py
+    deps:
+      - assets/raw_datasets/${dataset_name}
+      - src/setup/generate_assignment.py
+    outs:
+      - assets/original_assignment/${dataset_name}/original_assignment.csv
+    params:
+      - dataset_name
+      - timeslots
+      - num_clients
+      - arrival_rate
+  final_assignment:
+    cmd: python src/policies/apply.py
+    deps:
+      - assets/original_assignment/${dataset_name}/
+      - src/policies/
+    outs:
+      - assets/final_assignment/${dataset_name}/final_assignment.json
+    params:
+      - dataset_name
+      - timeslots
+      - num_clients
+      - fl_rounds
+      - cache_capacity
+  simulate:
+    cmd: python src/simulation.py
+    deps:
+      - assets/final_assignment/${dataset_name}/
+      - src/simulation.py
+      - src/flower/
+    params:
+      - dataset_name
+      - num_clients
+      - fl_rounds
+      - model_name
+
+
+
+
+
+

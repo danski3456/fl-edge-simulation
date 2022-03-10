@@ -1,0 +1,96 @@
+schema: '2.0'
+stages:
+  download_data:
+    cmd: python src/setup/download_dataset.py
+    deps:
+    - path: src/datasets
+      md5: fdfb780ff1588540bc71efe2c3cfe246.dir
+      size: 6649
+      nfiles: 6
+    - path: src/setup/download_dataset.py
+      md5: 1f33bd10e776c5ab04e875d1799e55dc
+      size: 163
+    params:
+      params.yaml:
+        dataset_name: mnist
+    outs:
+    - path: assets/raw_datasets/mnist
+      md5: ef50dfefcc25e2e7865d16dfc852a4f2.dir
+      size: 133089540
+      nfiles: 16
+  original_assignment:
+    cmd: python src/setup/generate_assignment.py
+    deps:
+    - path: assets/raw_datasets/mnist
+      md5: ef50dfefcc25e2e7865d16dfc852a4f2.dir
+      size: 133089540
+      nfiles: 16
+    - path: src/setup/generate_assignment.py
+      md5: d0f3b65e47813c9ce98fb8ed3e98043c
+      size: 1860
+    params:
+      params.yaml:
+        arrival_rate:
+          type: constant
+          quantity: 100
+        dataset_name: mnist
+        num_clients: 6
+        timeslots: 20
+    outs:
+    - path: assets/original_assignment/mnist/original_assignment.csv
+      md5: bce9039b755dcf39732f84ee6c1d308d
+      size: 147784
+  final_assignment:
+    cmd: python src/policies/apply.py
+    deps:
+    - path: assets/original_assignment/mnist/
+      md5: 9774a510b94f8049a8200bd9129d0bae.dir
+      size: 147809
+      nfiles: 2
+    - path: src/policies/
+      md5: d560a4e3fc113bd43c05e3013eef5c7f.dir
+      size: 2797
+      nfiles: 3
+    params:
+      params.yaml:
+        cache_capacity:
+          type: constant
+          quantity: 500
+        dataset_name: mnist
+        fl_rounds:
+        - 0
+        - 5
+        - 10
+        - 15
+        - 19
+        num_clients: 6
+        timeslots: 20
+    outs:
+    - path: assets/final_assignment/mnist/final_assignment.json
+      md5: fe108121d47ad4acbeac8539e5fa780b
+      size: 192784
+  simulate:
+    cmd: python src/simulation.py
+    deps:
+    - path: assets/final_assignment/mnist/
+      md5: 07a5458d8ba8d31da11f5155268fb6cc.dir
+      size: 192807
+      nfiles: 2
+    - path: src/flower/
+      md5: ba5c55c68b344160a713d5ccbcc1a36a.dir
+      size: 7121
+      nfiles: 4
+    - path: src/simulation.py
+      md5: 82623b55c89f9f1737d024b219cb3940
+      size: 977
+    params:
+      params.yaml:
+        dataset_name: mnist
+        fl_rounds:
+        - 0
+        - 5
+        - 10
+        - 15
+        - 19
+        model_name: mnist
+        num_clients: 6

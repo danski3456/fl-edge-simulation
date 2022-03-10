@@ -1,0 +1,7 @@
+raw_datasets="assets/raw_datasets"
+
+final_assignment_dir="assets/final_assignment"
+final_assignment_filename = "final_assignment.json"
+
+original_assignment_dir="assets/original_assignment"
+original_assignment_filename = "original_assignment.csv"

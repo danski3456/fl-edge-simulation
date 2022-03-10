@@ -1,0 +1,8 @@
+
+# Ignore dynaconf secret files
+.secrets.*
+lightning_logs
+
+__pycache__
+.env
+.devcontainer/

@@ -1,0 +1,12 @@
+dataset_name: mnist
+num_clients: 6
+timeslots: 20 
+arrival_rate:
+  type: constant
+  quantity: 100
+cache_capacity: 
+  type: constant
+  quantity: 500
+fl_rounds: [0, 5, 10, 15, 19]
+
+model_name: mnist
