@@ -9,7 +9,7 @@ from queue import Queue
 from config import settings as st
 
 from src.path_utils import original_assignment_path, final_assignmnet_path
-from src.policies.cache_capacities import get_cache_capacities
+from src.policies.map import name_to_policy
 
 # %%
 
@@ -18,10 +18,11 @@ if __name__ == "__main__":
     path = original_assignment_path()
     df = pd.read_csv(path, index_col=None)
 
-    capacities = get_cache_capacities()
+    policies = []
+    for cl in range(st.NUM_CLIENTS):
+        p = name_to_policy[st.POLICIES[cl]](cl, df.columns)
+        policies.append(p)
 
-    # Used by clients to store their data across time-slots
-    client_caches = [deque(maxlen=capacities[i]) for i in range(st.NUM_CLIENTS)]
 
     # The exact datapoints available to clientson each fl round
     fl_round_datapoints = dict((i, dict()) for i in range(st.NUM_CLIENTS))
@@ -29,21 +30,13 @@ if __name__ == "__main__":
     # %%
     fl_round = 0
     for t in range(st.TIMESLOTS):
+        is_fl_round = t in st.FL_ROUNDS
         for cl in range(st.NUM_CLIENTS):
 
             sub_df = df[(df["arrival_time"] == t) & (df["client_id"] == cl)]
-            new_arrivals = sub_df["item_id"].values
-
-            if t in st.FL_ROUNDS:
-
-                fl_round_datapoints[cl][fl_round] = list(client_caches[cl]) + list(
-                    new_arrivals
-                )
-                fl_round_datapoints[cl][fl_round] = [
-                    int(x) for x in fl_round_datapoints[cl][fl_round]
-                ]
-
-            [client_caches[cl].append(it) for it in new_arrivals]
+            
+            fl_datapoints, share_dict = policies[cl].get_samples(sub_df, is_fl_round)
+            fl_round_datapoints[cl][fl_round] = fl_datapoints
 
         if t in st.FL_ROUNDS:
             fl_round += 1

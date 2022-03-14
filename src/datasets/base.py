@@ -28,7 +28,7 @@ class Dataset(ABC):
 
     def client_loader(
         self,
-        round_samples: [Dict[str, List[int]]],
+        round_samples: Dict[str, List[int]],
         val_fraction: float = 0.2,
         seed: int = 42,
         **kwargs,

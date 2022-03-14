@@ -23,9 +23,8 @@ def run_simulation():
     # Start all the clients
     for cl in range(st.NUM_CLIENTS):
         client_id = str(cl)
-        client_process = Process(target=start_client, args=(client_id))
+        client_process = Process(target=start_client, args=(client_id,))
         client_process.start()
-        print(f"Started {cl}")
         processes.append(client_process)
 
     # Block until all processes are finished
@@ -33,5 +32,7 @@ def run_simulation():
         p.join()
 
 
+
 if __name__ == "__main__":
-    run_simulation()
+    results = run_simulation()
+    print(results)

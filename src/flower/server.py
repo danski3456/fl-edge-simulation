@@ -2,32 +2,58 @@ import flwr as fl
 import pytorch_lightning as pl
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
+from src.models.base import MetricsCallback
 from src.models.map import name_to_model
 from src.datasets.map import name_to_dataset
 from config import settings as st
+from src.path_utils import save_metrics 
 
+def get_on_fit_config_fn() -> Callable[[int], Dict[str, str]]:
+    """Return a function which returns training configurations."""
 
-def start_server() -> None:
+    def fit_config(rnd: int) -> Dict[str, str]:
+        """Return a configuration with static batch size and (local) epochs."""
+        config = {
+            "learning_rate": str(0.001),
+            "batch_size": str(32),
+            "round": rnd - 1,
+        }
+        return config
+
+    return fit_config
+
+def start_server(*args) -> None:
     # Define strategy
 
     model = name_to_model[st.MODEL_NAME]
+    # metrics = MetricsCallback()
+
+    # Start Flower server for three rounds of federated learning
+
 
     strategy = fl.server.strategy.FedAvg(
+        fraction_fit=1,
+        min_fit_clients=st.NUM_CLIENTS,
+        min_available_clients=st.NUM_CLIENTS,
+        on_fit_config_fn=get_on_fit_config_fn(),
         eval_fn=get_eval_fn(model),
     )
 
-    # Start Flower server for three rounds of federated learning
-    fl.server.start_server(
+    history = fl.server.start_server(
         server_address="[::]:8080",
         config={"num_rounds": len(st.FL_ROUNDS)},
         strategy=strategy,
     )
+
+    save_metrics(history.metrics_centralized, "server")
+
 
 
 def get_eval_fn(model):
     """Return an evaluation function for server-side evaluation."""
     dataset = name_to_dataset[st.DATASET_NAME]
     dataloader = dataset.load_dataloader()
+
 
     # The `evaluate` function will be called after every round
     def evaluate(

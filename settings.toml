@@ -5,3 +5,6 @@ final_assignment_filename = "final_assignment.json"
 
 original_assignment_dir="assets/original_assignment"
 original_assignment_filename = "original_assignment.csv"
+
+metrics_dir = "assets/metrics"
+metrics_filename = "metrics.json"

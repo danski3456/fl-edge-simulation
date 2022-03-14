@@ -1,7 +1,35 @@
 import pytorch_lightning as pl
 import torch
+import copy
 from collections import OrderedDict
+from pytorch_lightning import Callback
 
+
+class MetricsCallback(Callback):
+    """PyTorch Lightning metric callback."""
+
+    def __init__(self):
+        super().__init__()
+        self.metrics = {}
+        self.cur_round = []
+
+    def _get_logged_metric(self, trainer, pl_module):
+        metrics = {}
+        for key, values in trainer.logged_metrics.items():
+            metrics[key] = values.item() 
+        return metrics
+
+    def on_train_epoch_end(self, trainer, pl_module):
+        metric = self._get_logged_metric(trainer, pl_module)
+        self.cur_round.append(metric)
+
+    def on_validation_epoch_end(self, trainer, pl_module):
+        metric = self._get_logged_metric(trainer, pl_module)
+        self.cur_round.append(metric)
+
+    def persist_round(self, round):
+        self.metrics[round] = copy.deepcopy(self.cur_round)
+        self.cur_round = []
 
 class Base(pl.LightningModule):
     def __init__(self):

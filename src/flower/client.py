@@ -18,13 +18,16 @@ from torchvision.datasets import MNIST
 
 from src.datasets.map import name_to_dataset
 from src.models.map import name_to_model
-from src.path_utils import final_assignmnet_path
+from src.models.base import MetricsCallback
+from src.path_utils import final_assignmnet_path, save_metrics
+
+
 
 
 class FlowerClient(fl.client.NumPyClient):
     def __init__(self, model, data_loaders):
         self.model = model
-        self.time_slot = 0
+        self.metrics_callback = MetricsCallback()
 
         self.data_loaders = data_loaders
 
@@ -34,12 +37,20 @@ class FlowerClient(fl.client.NumPyClient):
     def fit(self, parameters, config):
         self.model.set_parameters(parameters)
 
-        train_loader = self.data_loaders[self.time_slot]["train"]
-        val_loader = self.data_loaders[self.time_slot]["val"]
-        trainer = pl.Trainer(max_epochs=1, progress_bar_refresh_rate=0)
-        trainer.fit(self.model, train_loader, val_loader)
+        round = config["round"]
+        print("round",round, len(self.data_loaders))
+        
 
-        self.time_slot += 1
+        train_loader = self.data_loaders[round]["train"]
+        val_loader = self.data_loaders[round]["val"]
+        trainer = pl.Trainer(max_epochs=1, progress_bar_refresh_rate=0, callbacks=[self.metrics_callback])
+        trainer.fit(self.model, train_loader)
+        trainer.validate(dataloaders=val_loader)
+
+
+
+        self.metrics_callback.persist_round(round)
+
 
         return self.get_parameters(), len(train_loader.sampler), {}
 
@@ -63,6 +74,10 @@ def start_client(client_id: str) -> None:
     # Flower client
     client = FlowerClient(model, data_loaders)
     fl.client.start_numpy_client("0.0.0.0:8080", client)
+
+
+    save_metrics(client.metrics_callback.metrics, f"client_{client_id}")
+
 
 
 if __name__ == "__main__":

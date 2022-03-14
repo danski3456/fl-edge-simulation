@@ -42,9 +42,6 @@ class LitAutoEncoder(Base):
 
     def training_step(self, train_batch, batch_idx):
         x, y = train_batch
-        from collections import Counter
-
-        print(Counter(y.numpy()), y.shape)
         x = x.view(x.size(0), -1)
         z = self.encoder(x)
         x_hat = self.decoder(z)

@@ -39,6 +39,8 @@ stages:
       - assets/final_assignment/${dataset_name}/
       - src/simulation.py
       - src/flower/
+    outs:
+      - assets/metrics/
     params:
       - dataset_name
       - num_clients
