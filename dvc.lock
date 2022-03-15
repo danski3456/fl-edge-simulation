@@ -4,8 +4,8 @@ stages:
     cmd: python src/setup/download_dataset.py
     deps:
     - path: src/datasets
-      md5: 8cda68eaec270260e7242f7a0f0b0722.dir
-      size: 6645
+      md5: 9c0bc16268f8ebd7ccf00fd6b64655e9.dir
+      size: 6732
       nfiles: 6
     - path: src/setup/download_dataset.py
       md5: 1f33bd10e776c5ab04e875d1799e55dc
@@ -99,3 +99,23 @@ stages:
       md5: bc570dad141cce33b85c3194c72a7716.dir
       size: 3811
       nfiles: 7
+  report:
+    cmd: python src/reports/data_distributions.py && python src/reports/training.py
+    deps:
+    - path: assets/metrics/
+      md5: bc570dad141cce33b85c3194c72a7716.dir
+      size: 3811
+      nfiles: 7
+    - path: src/reports
+      md5: 73c72ca06d37f498d058dbb64e8ae41c.dir
+      size: 2942
+      nfiles: 2
+    params:
+      params.yaml:
+        dataset_name: mnist
+        num_clients: 6
+    outs:
+    - path: assets/reports/images/mnist
+      md5: f58e5342ec69673296994e628f7593a7.dir
+      size: 30844
+      nfiles: 1

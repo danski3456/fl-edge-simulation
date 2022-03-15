@@ -46,6 +46,22 @@ stages:
       - num_clients
       - fl_rounds
       - model_name
+  report:
+    cmd: python src/reports/data_distributions.py && python src/reports/training.py
+    deps:
+      - assets/metrics/
+      - src/reports
+    outs:
+      - assets/reports/images/${dataset_name}
+    params:
+      - dataset_name
+      - num_clients
+
+
+
+
+
+
 
 
 

@@ -8,3 +8,5 @@ original_assignment_filename = "original_assignment.csv"
 
 metrics_dir = "assets/metrics"
 metrics_filename = "metrics.json"
+
+image_dir = "assets/reports/images"

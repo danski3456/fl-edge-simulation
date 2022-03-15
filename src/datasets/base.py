@@ -3,6 +3,7 @@ import random
 from collections import defaultdict
 from config import settings as st
 from torch.utils.data import Dataset, DataLoader
+from src.path_utils import get_path
 from typing import List, Dict
 from pathlib import Path
 
@@ -14,7 +15,7 @@ class Dataset(ABC):
 
     def __init__(self, name):
         self.name = name
-        self.path = Path(st.RAW_DATASETS) / name
+        self.path = get_path(st.RAW_DATASETS) / name
         self.path.mkdir(parents=True, exist_ok=True)
 
     def download_dataset(self) -> None:
