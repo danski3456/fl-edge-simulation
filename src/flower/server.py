@@ -6,7 +6,8 @@ from src.models.base import MetricsCallback
 from src.models.map import name_to_model
 from src.datasets.map import name_to_dataset
 from config import settings as st
-from src.path_utils import save_metrics 
+from src.path_utils import save_metrics, save_model
+
 
 def get_on_fit_config_fn() -> Callable[[int], Dict[str, str]]:
     """Return a function which returns training configurations."""
@@ -22,6 +23,7 @@ def get_on_fit_config_fn() -> Callable[[int], Dict[str, str]]:
 
     return fit_config
 
+
 def start_server(*args) -> None:
     # Define strategy
 
@@ -29,7 +31,6 @@ def start_server(*args) -> None:
     # metrics = MetricsCallback()
 
     # Start Flower server for three rounds of federated learning
-
 
     strategy = fl.server.strategy.FedAvg(
         fraction_fit=1,
@@ -48,25 +49,24 @@ def start_server(*args) -> None:
     save_metrics(history.metrics_centralized, "server")
 
 
-
 def get_eval_fn(model):
     """Return an evaluation function for server-side evaluation."""
     dataset = name_to_dataset[st.DATASET_NAME]
-    dataloader = dataset.load_dataloader()
-
+    dataloader = dataset.load_dataloader(train=False)
 
     # The `evaluate` function will be called after every round
     def evaluate(
         weights: fl.common.Weights,
     ) -> Optional[Tuple[float, Dict[str, fl.common.Scalar]]]:
 
+        save_model(weights, st.MODEL_NAME, st.DATASET_NAME)
         model.set_parameters(weights)
         trainer = pl.Trainer(progress_bar_refresh_rate=0)
         results = trainer.test(model, dataloader)
-        loss = results[0]["test_loss"]
+        loss = results[-1]["test_loss"]
         # model.set_weights(weights)  # Update model with the latest parameters
         # loss, accuracy = model.evaluate(x_val, y_val)
-        return loss, {"loss": loss}
+        return loss, results[0]
 
     return evaluate
 

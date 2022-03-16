@@ -41,13 +41,14 @@ stages:
       - src/flower/
     outs:
       - assets/metrics/
+      - assets/models/
     params:
       - dataset_name
       - num_clients
       - fl_rounds
       - model_name
   report:
-    cmd: python src/reports/data_distributions.py && python src/reports/training.py
+    cmd: python src/reports/data_distributions.py && python src/reports/training.py && python src/reports/confusion_matrix.py
     deps:
       - assets/metrics/
       - src/reports

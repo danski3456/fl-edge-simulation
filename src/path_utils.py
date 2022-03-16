@@ -1,3 +1,4 @@
+import numpy as np
 import json
 from config import settings as st
 from pathlib import Path
@@ -55,4 +56,26 @@ def save_image(fig, img_name):
     print(path)
 
     path.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(path)
+    fig.savefig(path, bbox_inches="tight")
+
+
+def model_path(model_name, dataset_name):
+    path = Path(st.ROOT_DIR)
+    path /= st.MODELS_DIR
+    path.mkdir(parents=True, exist_ok=True)
+    name = f"{model_name}_{dataset_name}.npz"
+    path /= name
+    return path
+
+
+def save_model(weights, model_name, dataset_name):
+    path = model_path(model_name, dataset_name)
+    np.savez(path, *weights)
+
+
+def load_model(model, model_name, dataset_name):
+    path = model_path(model_name, dataset_name)
+    weights = np.load(path)
+    weights = [weights[f] for f in weights.files]
+    model.set_parameters(weights)
+    return model

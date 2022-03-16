@@ -25,10 +25,10 @@ for cl in range(st.NUM_CLIENTS):
 
 df = pd.concat(client_metrics)
 df = df.melt(
-    id_vars= ["client_id", "round"],
+    id_vars=["client_id", "round"],
     value_vars=["Train", "Validation"],
-    value_name="Loss"
-    )
+    value_name="Loss",
+)
 
 # %%
 g = sns.FacetGrid(df, hue="variable", col="client_id", col_wrap=3)
@@ -38,7 +38,7 @@ save_image(g, "training_clients.png")
 # sns.lineplot(data=df[df["client_id"] == 0], x="round", y="loss", hue="variable")
 # %%
 
-x, y = zip(*server_metrics["loss"])
+x, y = zip(*server_metrics["test_loss"])
 fig, ax = plt.subplots()
 ax.plot(x, y, label="Validation Loss")
 ax.set_xlabel("# Round")
