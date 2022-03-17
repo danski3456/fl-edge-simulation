@@ -16,7 +16,7 @@ class MetricsCallback(Callback):
     def _get_logged_metric(self, trainer, pl_module):
         metrics = {}
         for key, values in trainer.logged_metrics.items():
-            metrics[key] = values.item() 
+            metrics[key] = values.item() if isinstance(values, torch.Tensor) else values
         return metrics
 
     def on_train_epoch_end(self, trainer, pl_module):
@@ -30,6 +30,7 @@ class MetricsCallback(Callback):
     def persist_round(self, round):
         self.metrics[round] = copy.deepcopy(self.cur_round)
         self.cur_round = []
+
 
 class Base(pl.LightningModule):
     def __init__(self):

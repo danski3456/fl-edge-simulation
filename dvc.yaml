@@ -34,10 +34,10 @@ stages:
       - fl_rounds
       - cache_capacity
   simulate:
-    cmd: python src/simulation.py
+    cmd: python src/simulations/federated_learning.py
     deps:
       - assets/final_assignment/${dataset_name}/
-      - src/simulation.py
+      - src/simulations/federated_learning.py
       - src/flower/
     outs:
       - assets/metrics/
