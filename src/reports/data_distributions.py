@@ -57,9 +57,10 @@ for i in range(6):
     for c in unique_classes:
 
         height = df_[(df_["class"] == c)]["round"].value_counts().to_dict()
-        if not height:
-            for x in rounds:
+        for x in rounds:
+            if x not in height:
                 height.update({x: 0})
+        print(i, c, height)
         yy = np.array([height[x] for x in rounds]) / totals
         ax.bar(rounds, yy, width=1, bottom=cant_rounds, align="edge")
         cant_rounds += yy

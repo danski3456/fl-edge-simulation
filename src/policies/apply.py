@@ -3,8 +3,9 @@ import json
 import pandas as pd
 import numpy as np
 from pathlib import Path
-from collections import deque
+from collections import deque, defaultdict
 from queue import Queue
+from copy import deepcopy
 
 from config import settings as st
 
@@ -20,26 +21,40 @@ if __name__ == "__main__":
 
     policies = []
     for cl in range(st.NUM_CLIENTS):
-        p = name_to_policy[st.POLICIES[cl]](cl, df.columns)
+        policy_name = st.POLICIES[cl] if isinstance(st.POLICIES, list) else st.POLICIES
+        p = name_to_policy[policy_name](cl, df.columns)
         policies.append(p)
-
 
     # The exact datapoints available to clientson each fl round
     fl_round_datapoints = dict((i, dict()) for i in range(st.NUM_CLIENTS))
 
+    shared_datapoints_prev = dict((i, []) for i in range(st.NUM_CLIENTS))
+
     # %%
     fl_round = 0
     for t in range(st.TIMESLOTS):
+
+        shared_datapoints_new = dict((i, []) for i in range(st.NUM_CLIENTS))
         is_fl_round = t in st.FL_ROUNDS
+
         for cl in range(st.NUM_CLIENTS):
 
             sub_df = df[(df["arrival_time"] == t) & (df["client_id"] == cl)]
-            
-            fl_datapoints, share_dict = policies[cl].get_samples(sub_df, is_fl_round)
-            fl_round_datapoints[cl][fl_round] = fl_datapoints
+            received_dp = shared_datapoints_prev[cl]
 
-        if t in st.FL_ROUNDS:
+            fl_datapoints, share_dict = policies[cl].get_samples(
+                sub_df, received_dp, is_fl_round
+            )
+            for dest_cl, dps in share_dict.items():
+                shared_datapoints_new[dest_cl].append(dps)
+
+            if is_fl_round:
+                fl_round_datapoints[cl][fl_round] = fl_datapoints
+
+        if is_fl_round:
             fl_round += 1
+
+        shared_datapoints_prev = deepcopy(shared_datapoints_new)
 
     # %%
     output_path = final_assignmnet_path()

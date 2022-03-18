@@ -33,15 +33,17 @@ stages:
       - num_clients
       - fl_rounds
       - cache_capacity
+      - topology
   simulate:
-    cmd: python src/simulations/federated_learning.py
+    cmd: python src/simulations/federated_learning.py && python src/simulations/central_server.py
     deps:
       - assets/final_assignment/${dataset_name}/
-      - src/simulations/federated_learning.py
+      - src/simulations/
       - src/flower/
     outs:
       - assets/metrics/
       - assets/models/
+
     params:
       - dataset_name
       - num_clients

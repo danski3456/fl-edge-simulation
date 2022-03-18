@@ -1,5 +1,6 @@
 dataset_name: mnist
 iid: False
+seed: 42
 num_clients: 6
 timeslots: 20 
 arrival_rate:
@@ -8,7 +9,7 @@ arrival_rate:
 cache_capacity: 
   type: constant
   quantity: 500
-fl_rounds: [0, 1]
-policies: ["sfifo", "sfifo", "sfifo", "sfifo", "sfifo", "sfifo"]
-
+fl_rounds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+policies: sfifo
 model_name: mnist_conv
+topology: none
