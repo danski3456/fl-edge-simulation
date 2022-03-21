@@ -1,5 +1,5 @@
 dataset_name: mnist
-iid: False
+iid: True
 seed: 42
 num_clients: 6
 timeslots: 10
