@@ -26,26 +26,27 @@ stages:
       size: 133089540
       nfiles: 16
     - path: src/setup/generate_assignment.py
-      md5: 0c72d17e768ec2fa3311be293806b90f
-      size: 2406
+      md5: 4196d13c38c9921d774b18d31ad599b6
+      size: 2398
     params:
       params.yaml:
         arrival_rate:
           type: constant
           quantity: 100
         dataset_name: mnist
+        iid: true
         num_clients: 6
-        timeslots: 20
+        timeslots: 10
     outs:
     - path: assets/original_assignment/mnist/original_assignment.csv
-      md5: ad688d9cce4025da13b1b3c8f89063f2
-      size: 147249
+      md5: 43dc9220604649185650c4352a15a119
+      size: 70654
   final_assignment:
     cmd: python src/policies/apply.py
     deps:
     - path: assets/original_assignment/mnist/
-      md5: 972da486024ef556fca370b786ad71a9.dir
-      size: 147274
+      md5: ef01471b170c3b570a3d864df5913bd3.dir
+      size: 70679
       nfiles: 2
     - path: src/policies/
       md5: 492c5c06aa89f70a3dde185538e45ad5.dir
@@ -60,19 +61,27 @@ stages:
         fl_rounds:
         - 0
         - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+        - 9
         num_clients: 6
-        timeslots: 20
-        topology: ring
+        timeslots: 10
+        topology: none
     outs:
     - path: assets/final_assignment/mnist/final_assignment.json
-      md5: bd02438356b6b09aac0da419509b916f
-      size: 16980
+      md5: 56a56c291bd5df6d3eacf4c2cbf4ebe3
+      size: 77652
   simulate:
     cmd: python src/simulations/federated_learning.py && python src/simulations/central_server.py
     deps:
     - path: assets/final_assignment/mnist/
-      md5: 1514c0d8432ca8b64f6ac76b8a22e44a.dir
-      size: 17003
+      md5: 261366604d0cf331a4778aaf9374532e.dir
+      size: 77675
       nfiles: 2
     - path: src/flower/
       md5: c95f428f8d6427659cf00fd3f90d3a66.dir
@@ -88,15 +97,23 @@ stages:
         fl_rounds:
         - 0
         - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+        - 9
         model_name: mnist_conv
         num_clients: 6
     outs:
     - path: assets/metrics/train
-      md5: 0913306c81b9f42358231afab63db31b.dir
-      size: 2787
+      md5: 87911762c26989d22b982c564a4a5f52.dir
+      size: 13441
       nfiles: 8
     - path: assets/models/
-      md5: f2547537e353649e3f5e73d3400fbaac.dir
+      md5: d0082ba42ca00de33a921b8010fc855c.dir
       size: 234452
       nfiles: 2
   report:
@@ -104,8 +121,8 @@ stages:
       && python src/reports/confusion_matrix.py
     deps:
     - path: assets/metrics/train
-      md5: 0913306c81b9f42358231afab63db31b.dir
-      size: 2787
+      md5: 87911762c26989d22b982c564a4a5f52.dir
+      size: 13441
       nfiles: 8
     - path: src/reports
       md5: eb52ee8f4438d40cca4cc116c8af30ee.dir
@@ -117,12 +134,12 @@ stages:
         num_clients: 6
     outs:
     - path: assets/metrics/test/central/metrics.json
-      md5: bc8b263c7b81c6ca124623ed2f5d84fc
+      md5: 5018b1429adaa14b32789bb9b39510b0
       size: 39
     - path: assets/metrics/test/federated/metrics.json
-      md5: 0cf2ec51b4a818c91dfbc2c5efe037e2
-      size: 40
+      md5: d596c3925c8fcdb9d53d11b10855a9db
+      size: 39
     - path: assets/reports/images/mnist
-      md5: 3b1feb9995019b9566e722cfb19f8ba6.dir
-      size: 176797
+      md5: 36e45e842ad20d38477168f19263a6a5.dir
+      size: 229295
       nfiles: 5
