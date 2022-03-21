@@ -52,7 +52,7 @@ def start_server(*args) -> None:
 def get_eval_fn(model):
     """Return an evaluation function for server-side evaluation."""
     dataset = name_to_dataset[st.DATASET_NAME]
-    dataloader = dataset.load_dataloader(train=False)
+    dataloader = dataset.load_dataloader(stage="server_eval")
 
     # The `evaluate` function will be called after every round
     def evaluate(

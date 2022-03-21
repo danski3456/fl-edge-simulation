@@ -4,8 +4,8 @@ stages:
     cmd: python src/setup/download_dataset.py
     deps:
     - path: src/datasets
-      md5: 9c0bc16268f8ebd7ccf00fd6b64655e9.dir
-      size: 6732
+      md5: ed2b81c5337cf6cdc336b41f52174f27.dir
+      size: 9770
       nfiles: 6
     - path: src/setup/download_dataset.py
       md5: 1f33bd10e776c5ab04e875d1799e55dc
@@ -26,8 +26,8 @@ stages:
       size: 133089540
       nfiles: 16
     - path: src/setup/generate_assignment.py
-      md5: fe0d75a03559fe925fe2e367eeedabcb
-      size: 2393
+      md5: 0c72d17e768ec2fa3311be293806b90f
+      size: 2406
     params:
       params.yaml:
         arrival_rate:
@@ -38,19 +38,19 @@ stages:
         timeslots: 20
     outs:
     - path: assets/original_assignment/mnist/original_assignment.csv
-      md5: 7e61c858c5ca40ac1cf309e64fc01403
-      size: 147958
+      md5: 26bdf04e6f6ebe8304070bef05baf5df
+      size: 147264
   final_assignment:
     cmd: python src/policies/apply.py
     deps:
     - path: assets/original_assignment/mnist/
-      md5: 274b694f9d6678ffdadb000a6cd2c8c4.dir
-      size: 147983
+      md5: bc7bfd469e74ca10ed5c5cad521414f5.dir
+      size: 147289
       nfiles: 2
     - path: src/policies/
-      md5: 4efe64929c11fe0e538a7e586b81b821.dir
-      size: 13269
-      nfiles: 8
+      md5: 492c5c06aa89f70a3dde185538e45ad5.dir
+      size: 18701
+      nfiles: 11
     params:
       params.yaml:
         cache_capacity:
@@ -60,83 +60,69 @@ stages:
         fl_rounds:
         - 0
         - 1
-        - 2
-        - 3
-        - 4
-        - 5
-        - 6
-        - 7
-        - 8
-        - 9
-        - 10
-        - 11
-        - 12
-        - 13
-        - 14
-        - 15
-        - 16
-        - 17
-        - 18
-        - 19
         num_clients: 6
         timeslots: 20
-        topology: none
+        topology: ring
     outs:
     - path: assets/final_assignment/mnist/final_assignment.json
-      md5: 3c317c479234a9a54c7ee2f13a0fc666
-      size: 507075
+      md5: 807cc6b032c40fe7da990f3426a40277
+      size: 16967
   simulate:
     cmd: python src/simulations/federated_learning.py && python src/simulations/central_server.py
     deps:
     - path: assets/final_assignment/mnist/
-      md5: 0b557b5955ddf0f23c25aa3374f1054a.dir
-      size: 76978
+      md5: 436fc6c6bef60834cdfe050cf2d2dd9a.dir
+      size: 16990
       nfiles: 2
     - path: src/flower/
-      md5: c71d4934e9d664023891e7ddd031e257.dir
-      size: 9482
+      md5: c95f428f8d6427659cf00fd3f90d3a66.dir
+      size: 9502
       nfiles: 4
     - path: src/simulations/
-      md5: a2367bc794128c48255b9c839e4fe417.dir
-      size: 1800304
-      nfiles: 33
+      md5: 937b017af016d536724c9923a2270fdf.dir
+      size: 2156712
+      nfiles: 37
     params:
       params.yaml:
         dataset_name: mnist
         fl_rounds:
         - 0
-        - 5
-        - 10
-        - 15
+        - 1
         model_name: mnist_conv
         num_clients: 6
     outs:
-    - path: assets/metrics/
-      md5: 8d6d467a961573a99527f3256042833a.dir
-      size: 5151
+    - path: assets/metrics/train
+      md5: 53039d19d45896accd4b24523724576f.dir
+      size: 2818
       nfiles: 8
     - path: assets/models/
-      md5: f93451b2e0e8df9535bba7be09013801.dir
+      md5: 152ab4b2a17a5fd81443c44923a461c3.dir
       size: 234452
       nfiles: 2
   report:
     cmd: python src/reports/data_distributions.py && python src/reports/training.py
       && python src/reports/confusion_matrix.py
     deps:
-    - path: assets/metrics/
-      md5: 8d6d467a961573a99527f3256042833a.dir
-      size: 5151
+    - path: assets/metrics/train
+      md5: 53039d19d45896accd4b24523724576f.dir
+      size: 2818
       nfiles: 8
     - path: src/reports
-      md5: 16244e2cf928fe91837472a55e8b02ad.dir
-      size: 6921
-      nfiles: 33
+      md5: eb52ee8f4438d40cca4cc116c8af30ee.dir
+      size: 7611
+      nfiles: 37
     params:
       params.yaml:
         dataset_name: mnist
         num_clients: 6
     outs:
+    - path: assets/metrics/test/central/metrics.json
+      md5: 8a599d0f0bde4051b5005053face3d85
+      size: 37
+    - path: assets/metrics/test/federated/metrics.json
+      md5: 50bac76fe57c82a2be9a0d3ec03b7a6f
+      size: 40
     - path: assets/reports/images/mnist
-      md5: 0f1712ef8e59eb9e11c969355bd8abe7.dir
-      size: 169541
+      md5: 49e0c8cbf3a84a6ca40c36a499bdde74.dir
+      size: 178404
       nfiles: 5

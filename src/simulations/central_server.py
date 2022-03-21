@@ -1,6 +1,7 @@
 # %%
 import json
 import numpy as np
+from collections import defaultdict
 import torch
 import pytorch_lightning as pl
 from config import settings as st
@@ -27,18 +28,21 @@ if __name__ == "__main__":
     with open(assignment_path, "r") as fh:
         assignment_order = json.load(fh)
 
-    idx_samples = {"0": []}
+    idx_samples = defaultdict(list)
     for k, v in assignment_order.items():
         for round, items in v.items():
-            idx_samples["0"].extend(items)
+            idx_samples[round].extend(items)
     # %%
 
-    loaders = dataset.client_loader(idx_samples)[0]
+    loaders = dataset.client_loader(idx_samples)
     # %%
-    trainer = pl.Trainer(max_epochs=len(st.FL_ROUNDS), callbacks=[metrics])
-    result = trainer.fit(model, loaders["train"], loaders["val"])
+    trainer = pl.Trainer(max_epochs=1, callbacks=[metrics])
+    results = []
+    for round, loader in loaders.items():
+        result = trainer.fit(model, loader["train"], loader["val"])
+        metrics.persist_round(round)
+        results.append(result)
     # %%
-    metrics.persist_round(0)
     save_metrics(metrics.metrics, f"central_server")
 
     # %%

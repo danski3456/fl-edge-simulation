@@ -12,7 +12,7 @@ from src.datasets.map import name_to_dataset
 from collections import Counter
 
 # %%
-dataset = name_to_dataset[st.DATASET_NAME].load_dataset()
+dataset = name_to_dataset[st.DATASET_NAME].load_dataset(stage="train")
 
 # %%
 

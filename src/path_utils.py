@@ -27,23 +27,24 @@ def final_assignmnet_path():
     return path
 
 
-def metrics_path(agent_id):
+def metrics_path(agent_id, train=True):
     path = Path(st.ROOT_DIR)
     path /= st.METRICS_DIR
+    path /= "train" if train else "test"
     path /= str(agent_id)
     path /= st.METRICS_FILENAME
     return path
 
 
-def save_metrics(metrics, agent_id):
-    path = metrics_path(agent_id)
+def save_metrics(metrics, agent_id, train=True):
+    path = metrics_path(agent_id, train)
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w") as fh:
         json.dump(metrics, fh, indent=2)
 
 
-def load_metrics(agent_id):
-    path = metrics_path(agent_id)
+def load_metrics(agent_id, train=True):
+    path = metrics_path(agent_id, train)
     with open(path, "r") as fh:
         return json.load(fh)
 

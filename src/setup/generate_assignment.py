@@ -84,7 +84,7 @@ if __name__ == "__main__":
     path = original_assignment_path()
     path.parent.mkdir(parents=True, exist_ok=True)
     # Load dataset
-    dataset = name_to_dataset[st.DATASET_NAME].load_dataset()
+    dataset = name_to_dataset[st.DATASET_NAME].load_dataset(stage="train")
     df_assignment = generate_distribution(dataset)
 
     # %%

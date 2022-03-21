@@ -63,38 +63,3 @@ class LitAutoEncoder(Base):
         loss = F.mse_loss(x_hat, x)
         if stage:
             self.log(f"{stage}_loss", loss, prog_bar=True)
-
-
-# def load_data():
-#     # Training / validation set
-#     trainset = MNIST("/workspace/data/mnist/train", train=True, download=False, transform=transforms.ToTensor())
-#     mnist_train, mnist_val = random_split(trainset, [55000, 5000])
-#     train_loader = DataLoader(mnist_train, batch_size=32, shuffle=True, num_workers=16)
-#     val_loader = DataLoader(mnist_val, batch_size=32, shuffle=False, num_workers=16)
-
-#     # Test set
-#     testset = MNIST("/workspace/data/mnist/test", train=False, download=True, transform=transforms.ToTensor())
-#     test_loader = DataLoader(testset, batch_size=32, shuffle=False, num_workers=16)
-
-#     return trainset, train_loader, val_loader, test_loader
-
-
-# def main() -> None:
-#     """Centralized training."""
-
-#     # Load data
-#     train_loader, val_loader, test_loader = load_data()
-
-#     # Load model
-#     model = LitAutoEncoder()
-
-#     # Train
-#     trainer = pl.Trainer(max_epochs=5, progress_bar_refresh_rate=0)
-#     trainer.fit(model, train_loader, val_loader)
-
-#     # Test
-#     trainer.test(model, test_loader)
-
-
-# if __name__ == "__main__":
-#     main()

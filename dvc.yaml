@@ -41,7 +41,7 @@ stages:
       - src/simulations/
       - src/flower/
     outs:
-      - assets/metrics/
+      - assets/metrics/train
       - assets/models/
 
     params:
@@ -52,13 +52,18 @@ stages:
   report:
     cmd: python src/reports/data_distributions.py && python src/reports/training.py && python src/reports/confusion_matrix.py
     deps:
-      - assets/metrics/
+      - assets/metrics/train
       - src/reports
     outs:
       - assets/reports/images/${dataset_name}
     params:
       - dataset_name
       - num_clients
+    metrics:
+      - assets/metrics/test/central/metrics.json:
+          cache: true
+      - assets/metrics/test/federated/metrics.json:
+          cache: true
 
 
 

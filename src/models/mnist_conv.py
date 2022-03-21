@@ -41,6 +41,7 @@ class MNISTConvNet(Base):
         )
         # fully connected layer, output 10 classes
         self.out = nn.Linear(32 * 7 * 7, 10)
+        self.core_metric = torchmetrics.F1Score(num_classes=10)
         self.accuracy = torchmetrics.Accuracy()
         self.confusion = torchmetrics.ConfusionMatrix(num_classes=10)
 
@@ -108,7 +109,7 @@ if __name__ == "__main__":
     from src.models.base import MetricsCallback
 
     metrics = MetricsCallback()
-    dataloader = MNISTDataset().load_dataloader()
+    dataloader = MNISTDataset().load_dataloader(stage="train")
     trainer = pl.Trainer(max_epochs=1, callbacks=[metrics])
 
     trainer.fit(model, dataloader)
@@ -117,7 +118,7 @@ if __name__ == "__main__":
 
     # Test
 
-    dataloader_test = MNISTDataset().load_dataloader(train=False)
+    dataloader_test = MNISTDataset().load_dataloader(stage="test")
     results = trainer.test(model, dataloaders=dataloader_test)
     print(results)
 
