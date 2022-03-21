@@ -61,9 +61,9 @@ stages:
       - num_clients
     metrics:
       - assets/metrics/test/central/metrics.json:
-          cache: true
+          cache: false
       - assets/metrics/test/federated/metrics.json:
-          cache: true
+          cache: false
 
 
 
