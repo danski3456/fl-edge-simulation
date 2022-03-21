@@ -48,9 +48,9 @@ def generate_distribution(dataset: Dataset) -> pd.DataFrame:
     df.columns = ["item_id", "class"]
 
     class_to_client = defaultdict(list)
+    C = df["class"].nunique()
+    N = st.NUM_CLIENTS
     if st.IID is False:
-        C = df["class"].nunique()
-        N = st.NUM_CLIENTS
         if C > N:
             for c in range(C):
                 class_to_client[c % N].append(c)

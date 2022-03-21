@@ -20,6 +20,7 @@ stages:
       - timeslots
       - num_clients
       - arrival_rate
+      - iid
   final_assignment:
     cmd: python src/policies/apply.py
     deps:
