@@ -38,14 +38,14 @@ stages:
         timeslots: 20
     outs:
     - path: assets/original_assignment/mnist/original_assignment.csv
-      md5: 26bdf04e6f6ebe8304070bef05baf5df
-      size: 147264
+      md5: ad688d9cce4025da13b1b3c8f89063f2
+      size: 147249
   final_assignment:
     cmd: python src/policies/apply.py
     deps:
     - path: assets/original_assignment/mnist/
-      md5: bc7bfd469e74ca10ed5c5cad521414f5.dir
-      size: 147289
+      md5: 972da486024ef556fca370b786ad71a9.dir
+      size: 147274
       nfiles: 2
     - path: src/policies/
       md5: 492c5c06aa89f70a3dde185538e45ad5.dir
@@ -65,14 +65,14 @@ stages:
         topology: ring
     outs:
     - path: assets/final_assignment/mnist/final_assignment.json
-      md5: 807cc6b032c40fe7da990f3426a40277
-      size: 16967
+      md5: bd02438356b6b09aac0da419509b916f
+      size: 16980
   simulate:
     cmd: python src/simulations/federated_learning.py && python src/simulations/central_server.py
     deps:
     - path: assets/final_assignment/mnist/
-      md5: 436fc6c6bef60834cdfe050cf2d2dd9a.dir
-      size: 16990
+      md5: 1514c0d8432ca8b64f6ac76b8a22e44a.dir
+      size: 17003
       nfiles: 2
     - path: src/flower/
       md5: c95f428f8d6427659cf00fd3f90d3a66.dir
@@ -92,11 +92,11 @@ stages:
         num_clients: 6
     outs:
     - path: assets/metrics/train
-      md5: 53039d19d45896accd4b24523724576f.dir
-      size: 2818
+      md5: 0913306c81b9f42358231afab63db31b.dir
+      size: 2787
       nfiles: 8
     - path: assets/models/
-      md5: 152ab4b2a17a5fd81443c44923a461c3.dir
+      md5: f2547537e353649e3f5e73d3400fbaac.dir
       size: 234452
       nfiles: 2
   report:
@@ -104,8 +104,8 @@ stages:
       && python src/reports/confusion_matrix.py
     deps:
     - path: assets/metrics/train
-      md5: 53039d19d45896accd4b24523724576f.dir
-      size: 2818
+      md5: 0913306c81b9f42358231afab63db31b.dir
+      size: 2787
       nfiles: 8
     - path: src/reports
       md5: eb52ee8f4438d40cca4cc116c8af30ee.dir
@@ -117,12 +117,12 @@ stages:
         num_clients: 6
     outs:
     - path: assets/metrics/test/central/metrics.json
-      md5: 8a599d0f0bde4051b5005053face3d85
-      size: 37
+      md5: bc8b263c7b81c6ca124623ed2f5d84fc
+      size: 39
     - path: assets/metrics/test/federated/metrics.json
-      md5: 50bac76fe57c82a2be9a0d3ec03b7a6f
+      md5: 0cf2ec51b4a818c91dfbc2c5efe037e2
       size: 40
     - path: assets/reports/images/mnist
-      md5: 49e0c8cbf3a84a6ca40c36a499bdde74.dir
-      size: 178404
+      md5: 3b1feb9995019b9566e722cfb19f8ba6.dir
+      size: 176797
       nfiles: 5
