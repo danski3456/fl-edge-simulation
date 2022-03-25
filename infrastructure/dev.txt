@@ -1,0 +1,5 @@
+ipykernel
+dvc[s3] 
+black
+isort
+pylint
