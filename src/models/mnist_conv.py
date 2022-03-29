@@ -110,7 +110,7 @@ if __name__ == "__main__":
 
     metrics = MetricsCallback()
     dataloader = MNISTDataset().load_dataloader(stage="train")
-    trainer = pl.Trainer(max_epochs=1, callbacks=[metrics])
+    trainer = pl.Trainer(accelerator="auto", devices="auto", max_epochs=1, callbacks=[metrics])
 
     trainer.fit(model, dataloader)
 

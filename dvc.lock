@@ -4,8 +4,13 @@ stages:
     cmd: python src/setup/download_dataset.py
     deps:
     - path: src/datasets
+<<<<<<< HEAD
       md5: 3954ec9fd918e667471a073e7c37ca3a.dir
       size: 9830
+=======
+      md5: 9cdb11c7ca579cf4b83c02b69273ef48.dir
+      size: 9770
+>>>>>>> 3f931b9 (add gpu support)
       nfiles: 6
     - path: src/setup/download_dataset.py
       md5: 1f33bd10e776c5ab04e875d1799e55dc
@@ -39,14 +44,24 @@ stages:
         timeslots: 20
     outs:
     - path: assets/original_assignment/mnist/original_assignment.csv
+<<<<<<< HEAD
       md5: 4d8c62e320ff8c32ff3679884bcb170c
       size: 147241
+=======
+      md5: f0f4f57edb34c93a42288b69c57c6e35
+      size: 147386
+>>>>>>> 3f931b9 (add gpu support)
   final_assignment:
     cmd: python src/policies/apply.py
     deps:
     - path: assets/original_assignment/mnist/
+<<<<<<< HEAD
       md5: 067da184575f67b955e8ca657d6fd444.dir
       size: 147266
+=======
+      md5: f9d3279a58753a3239906764813a9fb9.dir
+      size: 147411
+>>>>>>> 3f931b9 (add gpu support)
       nfiles: 2
     - path: src/policies/
       md5: f165cb665ac893acc0e115f0c44c60c1.dir
@@ -66,12 +81,18 @@ stages:
         topology: ring
     outs:
     - path: assets/final_assignment/mnist/final_assignment.json
+<<<<<<< HEAD
       md5: 5b36076181fa1dce419cc541e1e3c833
       size: 16942
+=======
+      md5: 2914e70ab5231fc62e4f513da3f16c34
+      size: 17043
+>>>>>>> 3f931b9 (add gpu support)
   simulate:
     cmd: python src/simulations/federated_learning.py && python src/simulations/central_server.py
     deps:
     - path: assets/final_assignment/mnist/
+<<<<<<< HEAD
       md5: 9cd3e521fa1fa4fb5cdbb80d6088e62a.dir
       size: 16965
       nfiles: 2
@@ -83,6 +104,19 @@ stages:
       md5: fd644c4b968b926c5cb2dce33b232885.dir
       size: 2370
       nfiles: 2
+=======
+      md5: 41c59a28fb3234c867cede22a73c25a8.dir
+      size: 17066
+      nfiles: 2
+    - path: src/flower/
+      md5: 49513b6e8aee0cedd24e8a6851aed902.dir
+      size: 9541
+      nfiles: 4
+    - path: src/simulations/
+      md5: 5e26e8ee1b6601881655b784360b7e5a.dir
+      size: 2156748
+      nfiles: 37
+>>>>>>> 3f931b9 (add gpu support)
     params:
       params.yaml:
         dataset_name: mnist
@@ -93,11 +127,19 @@ stages:
         num_clients: 6
     outs:
     - path: assets/metrics/train
+<<<<<<< HEAD
       md5: 68b2be639396e583b1e511072f706ad1.dir
       size: 2768
       nfiles: 8
     - path: assets/models/
       md5: 6504a43999845d60d3bfec3ab7ea260d.dir
+=======
+      md5: 22706845c0a783db48931ef24eea589b.dir
+      size: 2775
+      nfiles: 8
+    - path: assets/models/
+      md5: 746f1879e0139a3c913978545e88e2a5.dir
+>>>>>>> 3f931b9 (add gpu support)
       size: 234452
       nfiles: 2
   report:
@@ -105,6 +147,7 @@ stages:
       && python src/reports/confusion_matrix.py
     deps:
     - path: assets/metrics/train
+<<<<<<< HEAD
       md5: 68b2be639396e583b1e511072f706ad1.dir
       size: 2768
       nfiles: 8
@@ -112,12 +155,22 @@ stages:
       md5: 4150c4c6a8ffc13412d0669311578b6f.dir
       size: 5190
       nfiles: 3
+=======
+      md5: 22706845c0a783db48931ef24eea589b.dir
+      size: 2775
+      nfiles: 8
+    - path: src/reports
+      md5: 1c1ccedd5527fcef472c68a798e144b5.dir
+      size: 7645
+      nfiles: 37
+>>>>>>> 3f931b9 (add gpu support)
     params:
       params.yaml:
         dataset_name: mnist
         num_clients: 6
     outs:
     - path: assets/metrics/test/central/metrics.json
+<<<<<<< HEAD
       md5: 769ea9a41f710f62fe6ef66d5225fd9a
       size: 39
     - path: assets/metrics/test/federated/metrics.json
@@ -126,4 +179,14 @@ stages:
     - path: assets/reports/images/mnist
       md5: 9d2c5e3158ae26338dd70c797f64e2af.dir
       size: 195186
+=======
+      md5: 396f888122df58ee11d59b9d5d232fda
+      size: 39
+    - path: assets/metrics/test/federated/metrics.json
+      md5: d0fbe55c51f30de86bf35383a68fa2cf
+      size: 39
+    - path: assets/reports/images/mnist
+      md5: fc75e624e6df0541f3becaa7f04ca9c7.dir
+      size: 206578
+>>>>>>> 3f931b9 (add gpu support)
       nfiles: 5

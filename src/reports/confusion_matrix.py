@@ -24,7 +24,7 @@ if __name__ == "__main__":
 
         model = load_model(model, st.MODEL_NAME, st.DATASET_NAME, mode)
 
-        trainer = pl.Trainer()
+        trainer = pl.Trainer(accelerator="auto", devices="auto")
         results = trainer.test(model, dataloaders=dataloader_test)
 
         # %%

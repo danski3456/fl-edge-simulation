@@ -61,7 +61,7 @@ def get_eval_fn(model):
 
         save_model(weights, st.MODEL_NAME, st.DATASET_NAME)
         model.set_parameters(weights)
-        trainer = pl.Trainer(progress_bar_refresh_rate=0)
+        trainer = pl.Trainer(accelerator="auto", devices="auto")
         results = trainer.test(model, dataloader)
         loss = results[-1]["test_loss"]
         # model.set_weights(weights)  # Update model with the latest parameters
