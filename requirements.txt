@@ -1,0 +1,11 @@
+pandas
+numpy
+flwr
+torch
+torchvision
+pytorch-lightning
+dvc[s3] 
+dynaconf
+seaborn 
+matplotlib
+ipykernel

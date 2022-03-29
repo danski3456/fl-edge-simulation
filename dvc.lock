@@ -4,13 +4,8 @@ stages:
     cmd: python src/setup/download_dataset.py
     deps:
     - path: src/datasets
-<<<<<<< HEAD
-      md5: 3954ec9fd918e667471a073e7c37ca3a.dir
-      size: 9830
-=======
-      md5: 9cdb11c7ca579cf4b83c02b69273ef48.dir
+      md5: 352228322f49cf7981b2eb736e5c17da.dir
       size: 9770
->>>>>>> 3f931b9 (add gpu support)
       nfiles: 6
     - path: src/setup/download_dataset.py
       md5: 1f33bd10e776c5ab04e875d1799e55dc
@@ -40,32 +35,22 @@ stages:
           quantity: 100
         dataset_name: mnist
         iid: false
-        num_clients: 6
-        timeslots: 20
+        num_clients: 9
+        timeslots: 23
     outs:
     - path: assets/original_assignment/mnist/original_assignment.csv
-<<<<<<< HEAD
-      md5: 4d8c62e320ff8c32ff3679884bcb170c
-      size: 147241
-=======
-      md5: f0f4f57edb34c93a42288b69c57c6e35
-      size: 147386
->>>>>>> 3f931b9 (add gpu support)
+      md5: 8b3a2d32f14af765aacdc24cea58e183
+      size: 255501
   final_assignment:
     cmd: python src/policies/apply.py
     deps:
     - path: assets/original_assignment/mnist/
-<<<<<<< HEAD
-      md5: 067da184575f67b955e8ca657d6fd444.dir
-      size: 147266
-=======
-      md5: f9d3279a58753a3239906764813a9fb9.dir
-      size: 147411
->>>>>>> 3f931b9 (add gpu support)
+      md5: 5ba979c59ca87aeddc221f9a761fbdb9.dir
+      size: 255526
       nfiles: 2
     - path: src/policies/
-      md5: f165cb665ac893acc0e115f0c44c60c1.dir
-      size: 16282
+      md5: e97af9cce2c0d00a1660294987da1006.dir
+      size: 16158
       nfiles: 9
     params:
       params.yaml:
@@ -76,70 +61,79 @@ stages:
         fl_rounds:
         - 0
         - 1
-        num_clients: 6
-        timeslots: 20
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+        - 9
+        - 10
+        - 11
+        - 12
+        - 13
+        - 14
+        - 15
+        - 16
+        - 17
+        - 18
+        - 19
+        num_clients: 9
+        timeslots: 23
         topology: ring
     outs:
     - path: assets/final_assignment/mnist/final_assignment.json
-<<<<<<< HEAD
-      md5: 5b36076181fa1dce419cc541e1e3c833
-      size: 16942
-=======
-      md5: 2914e70ab5231fc62e4f513da3f16c34
-      size: 17043
->>>>>>> 3f931b9 (add gpu support)
+      md5: db34c83773e141e6b68c19c597071038
+      size: 272802
   simulate:
     cmd: python src/simulations/federated_learning.py && python src/simulations/central_server.py
     deps:
     - path: assets/final_assignment/mnist/
-<<<<<<< HEAD
-      md5: 9cd3e521fa1fa4fb5cdbb80d6088e62a.dir
-      size: 16965
+      md5: a731dbe61d69e0c77df9a38bb8c3f92e.dir
+      size: 272662
       nfiles: 2
     - path: src/flower/
-      md5: 3972a7de3455ba139fe11bd57c5b450e.dir
-      size: 9542
+      md5: 6b948e67eb41962faebd20e8f788f826.dir
+      size: 9530
       nfiles: 4
     - path: src/simulations/
-      md5: fd644c4b968b926c5cb2dce33b232885.dir
-      size: 2370
+      md5: c88ec45df7d00c2bec9b63c9a72d2377.dir
+      size: 2406
       nfiles: 2
-=======
-      md5: 41c59a28fb3234c867cede22a73c25a8.dir
-      size: 17066
-      nfiles: 2
-    - path: src/flower/
-      md5: 49513b6e8aee0cedd24e8a6851aed902.dir
-      size: 9541
-      nfiles: 4
-    - path: src/simulations/
-      md5: 5e26e8ee1b6601881655b784360b7e5a.dir
-      size: 2156748
-      nfiles: 37
->>>>>>> 3f931b9 (add gpu support)
     params:
       params.yaml:
         dataset_name: mnist
         fl_rounds:
         - 0
         - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+        - 9
+        - 10
+        - 11
+        - 12
+        - 13
+        - 14
+        - 15
+        - 16
+        - 17
+        - 18
+        - 19
         model_name: mnist_conv
-        num_clients: 6
+        num_clients: 9
     outs:
     - path: assets/metrics/train
-<<<<<<< HEAD
-      md5: 68b2be639396e583b1e511072f706ad1.dir
-      size: 2768
-      nfiles: 8
+      md5: e630f6e0f0a24a266f0027dc966cd4f0.dir
+      size: 6939
+      nfiles: 1
     - path: assets/models/
-      md5: 6504a43999845d60d3bfec3ab7ea260d.dir
-=======
-      md5: 22706845c0a783db48931ef24eea589b.dir
-      size: 2775
-      nfiles: 8
-    - path: assets/models/
-      md5: 746f1879e0139a3c913978545e88e2a5.dir
->>>>>>> 3f931b9 (add gpu support)
+      md5: 288fa9ee49494e399abc05f15cf64e99.dir
       size: 234452
       nfiles: 2
   report:
@@ -147,46 +141,25 @@ stages:
       && python src/reports/confusion_matrix.py
     deps:
     - path: assets/metrics/train
-<<<<<<< HEAD
-      md5: 68b2be639396e583b1e511072f706ad1.dir
-      size: 2768
+      md5: 7cb6678ed039bd5d4b1fb280d1c2d254.dir
+      size: 2778
       nfiles: 8
     - path: src/reports
-      md5: 4150c4c6a8ffc13412d0669311578b6f.dir
-      size: 5190
+      md5: 09c88425269eafa8fa843c631061aa4e.dir
+      size: 5224
       nfiles: 3
-=======
-      md5: 22706845c0a783db48931ef24eea589b.dir
-      size: 2775
-      nfiles: 8
-    - path: src/reports
-      md5: 1c1ccedd5527fcef472c68a798e144b5.dir
-      size: 7645
-      nfiles: 37
->>>>>>> 3f931b9 (add gpu support)
     params:
       params.yaml:
         dataset_name: mnist
         num_clients: 6
     outs:
     - path: assets/metrics/test/central/metrics.json
-<<<<<<< HEAD
-      md5: 769ea9a41f710f62fe6ef66d5225fd9a
+      md5: 8f8f5ccfb5ee4b68b00ea5e9c98db960
       size: 39
     - path: assets/metrics/test/federated/metrics.json
-      md5: d379652eb699e408b24e5ba2008953be
-      size: 40
-    - path: assets/reports/images/mnist
-      md5: 9d2c5e3158ae26338dd70c797f64e2af.dir
-      size: 195186
-=======
-      md5: 396f888122df58ee11d59b9d5d232fda
-      size: 39
-    - path: assets/metrics/test/federated/metrics.json
-      md5: d0fbe55c51f30de86bf35383a68fa2cf
+      md5: 9993883d021752e0e579d0318260c257
       size: 39
     - path: assets/reports/images/mnist
-      md5: fc75e624e6df0541f3becaa7f04ca9c7.dir
-      size: 206578
->>>>>>> 3f931b9 (add gpu support)
+      md5: f408894851c52923e7fe19a91d215a00.dir
+      size: 195449
       nfiles: 5

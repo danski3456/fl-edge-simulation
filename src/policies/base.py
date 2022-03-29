@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 from collections import deque
 from pdb import Pdb
 import pdb
-from tkinter import W
 from typing import Union, List, Dict
 import pandas as pd
 from config import settings as st

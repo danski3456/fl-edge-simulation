@@ -19,3 +19,6 @@ COPY infrastructure/base.txt /tmp/pip-req/base.txt
 RUN pip install -r /tmp/pip-req/base.txt
 COPY infrastructure/dev.txt /tmp/pip-req/dev.txt
 RUN pip install -r /tmp/pip-req/dev.txt
+
+ENV PYTHONPATH "${PYTHONPATH}:/workspace"
+WORKDIR /workspace
