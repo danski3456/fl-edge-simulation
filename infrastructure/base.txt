@@ -3,6 +3,8 @@ numpy
 flwr
 torch
 torchvision
+torch
+torchvision
 pytorch-lightning
 dynaconf
 seaborn 

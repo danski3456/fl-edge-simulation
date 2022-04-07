@@ -5,6 +5,7 @@ Source: https://pytorchlightning.ai/ (2021/02/04)
 
 # %%
 
+import numpy as np
 import torch
 import torchmetrics
 from torch import nn
@@ -47,6 +48,31 @@ class MNISTConvNet(Base):
 
     def _get_model_parts(self):
         return [self.conv1, self.conv2, self.out]
+
+    def _get_f1s(self, preds, targets) -> dict:
+        cf = self.confusion(preds, targets)
+
+        f1s = {}
+        N = cf.sum().item()
+        for i in range(10):
+
+            try:
+                TP = cf[i, i].item()
+                FP = cf[i, :].sum().item() - TP
+                FN = cf[:, i].sum().item() - TP
+                C = np.delete(cf, i, 0)
+                C = np.delete(C, i, 1)
+                TN = C.sum().item()
+
+                precision = TP / (TP + FP)
+                recall = TP / (TP + FN)
+                f1 = (2 * TP) / (2 * TP + FP + FN)
+            except ZeroDivisionError:
+                f1 = 0
+
+            f1s[f"f1-{i}"] = f1
+
+        return f1s
 
     def forward(self, x):
         x = self.conv1(x)
@@ -110,7 +136,9 @@ if __name__ == "__main__":
 
     metrics = MetricsCallback()
     dataloader = MNISTDataset().load_dataloader(stage="train")
-    trainer = pl.Trainer(accelerator="auto", devices="auto", max_epochs=1, callbacks=[metrics])
+    trainer = pl.Trainer(
+        accelerator="auto", devices="auto", max_epochs=1, callbacks=[metrics]
+    )
 
     trainer.fit(model, dataloader)
 
@@ -120,6 +148,5 @@ if __name__ == "__main__":
 
     dataloader_test = MNISTDataset().load_dataloader(stage="test")
     results = trainer.test(model, dataloaders=dataloader_test)
-    print(results)
 
 # %%

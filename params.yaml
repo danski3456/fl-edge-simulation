@@ -1,15 +1,21 @@
 dataset_name: mnist
 iid: False
 seed: 42
-num_clients: 9
-timeslots: 23
+num_clients: 6
+timeslots: 70
 arrival_rate:
   type: constant
   quantity: 100
 cache_capacity: 
   type: constant
   quantity: 500
-fl_rounds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+fl_rounds: 
+  type: all
+  freq: 1
 policies: random
+max_resources: 1000 # each client can process 1000 samples at max
+resources:
+  # placeholder: none
+  0: "first-half"
 model_name: mnist_conv
 topology: ring

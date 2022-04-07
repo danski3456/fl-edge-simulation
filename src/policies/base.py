@@ -20,6 +20,23 @@ def get_cache_capacities() -> List[int]:
     return capacities
 
 
+def get_fl_rounds() -> List[int]:
+    """
+    Applies one of several functions to calculate
+    fl rounds from time-slots
+    """
+    fl_type = st.FL_ROUNDS["type"]
+    ts = list(range(st.TIMESLOTS))
+    if fl_type == "all":
+        rounds = ts
+    elif fl_type == "sample":
+        freq = st.FL_ROUNDS["freq"]
+        rounds = ts[::freq]
+    else:
+        raise NotImplementedError
+    return rounds
+
+
 class Policy(ABC):
     """
     Abstact class representing a general policy
@@ -35,6 +52,21 @@ class Policy(ABC):
         self.most_recent_store_idx = []
         self.most_recent_drop_idx = []
         self.most_recent_share_dict = dict()
+
+    def _get_availability(self, t: int) -> int:
+
+        if self.client_id in st.RESOURCES:
+            resource_type = st.RESOURCES[self.client_id]
+        else:
+            resource_type = "full"
+        if resource_type == "first-half":
+            perc = 1.0 if t <= (st.TIMESLOTS / 2) else 0.0
+        elif resource_type == "full":
+            perc = 1.0
+
+        availability = int(st.MAX_RESOURCES * perc)
+
+        return availability
 
     def _get_neighbours(self):
 
@@ -85,25 +117,21 @@ class Policy(ABC):
         self,
         new_samples: pd.DataFrame,
         received_samples: List[pd.DataFrame],
+        round: int,
         fl_round: bool = False,
     ):
 
         self._update_cache(new_samples, received_samples)
+        max_samples = self._get_availability(round)
+
         if fl_round is True:
             train_samples = pd.concat([new_samples, self.cache] + received_samples)
             train_samples = train_samples.drop_duplicates()
             train_samples = list(train_samples["item_id"].values)
-            # train_samples = list(new_samples["item_id"].values)
-            # if self.old_cache.shape[0] > 0:
-            #     train_samples.extend(list(self.old_cache["item_id"].values))
         else:
-            train_samples = list(self.cache["item_id"].values)
+            train_samples = []
+            # train_samples = list(self.cache["item_id"].values)
 
-        train_samples = [int(x) for x in train_samples]
-
-        # if self.client_id == 0:
-        #     import pdb
-
-        #     pdb.set_trace()
+        train_samples = [int(x) for x in train_samples][:max_samples]
 
         return train_samples, self.most_recent_share_dict

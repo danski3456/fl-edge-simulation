@@ -11,10 +11,14 @@ from config import settings as st
 
 from src.path_utils import original_assignment_path, final_assignmnet_path
 from src.policies.map import name_to_policy
+from src.policies.base import get_fl_rounds
 
 # %%
 
 if __name__ == "__main__":
+
+    FL_ROUNDS = get_fl_rounds()
+    print(FL_ROUNDS)
 
     path = original_assignment_path()
     df = pd.read_csv(path, index_col=None)
@@ -30,12 +34,14 @@ if __name__ == "__main__":
 
     shared_datapoints_prev = dict((i, []) for i in range(st.NUM_CLIENTS))
 
+
+
     # %%
     fl_round = 0
     for t in range(st.TIMESLOTS):
 
         shared_datapoints_new = dict((i, []) for i in range(st.NUM_CLIENTS))
-        is_fl_round = t in st.FL_ROUNDS
+        is_fl_round = t in FL_ROUNDS
 
         for cl in range(st.NUM_CLIENTS):
 
@@ -43,7 +49,7 @@ if __name__ == "__main__":
             received_dp = shared_datapoints_prev[cl]
 
             fl_datapoints, share_dict = policies[cl].get_samples(
-                sub_df, received_dp, is_fl_round
+                sub_df, received_dp, t, is_fl_round
             )
             for dest_cl, dps in share_dict.items():
                 shared_datapoints_new[dest_cl].append(dps)

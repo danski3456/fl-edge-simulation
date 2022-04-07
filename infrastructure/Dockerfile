@@ -1,4 +1,5 @@
-FROM nvidia/cuda:11.4.2-devel-ubuntu20.04
+ARG IMAGEFILE=nvidia/cuda:11.4.2-devel-ubuntu20.04
+FROM ${IMAGEFILE} 
 
 ARG UID
 ENV PYTHONDONTWRITEBYTECODE 1 \  # Keeps Python from generating .pyc files in the container

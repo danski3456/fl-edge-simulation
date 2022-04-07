@@ -1,4 +1,5 @@
 # %%
+from tkinter import W
 import numpy as np
 import torch
 import pytorch_lightning as pl
@@ -44,6 +45,21 @@ if __name__ == "__main__":
         # %%
         cf = model.confusion(preds, targets)
         # cfs.append(cf)
+
+        # f1s = {}
+        # N = cf.sum().item()
+        # for i in range(10):
+        #     TP = cf[i, i].item()
+        #     FP = cf[i, :].sum().item() - TP
+        #     FN = cf[:, i].sum().item() - TP
+        #     C = np.delete(cf, i, 0)
+        #     C = np.delete(C, i, 1)
+        #     TN = C.sum().item()
+
+        #     precision = TP / (TP + FP)
+        #     recall = TP / (TP + FN)
+        #     f1 = (2 * TP) / (2 * TP + FP + FN)
+        #     f1s[i] = f1
 
         # %%
         assert np.allclose(
