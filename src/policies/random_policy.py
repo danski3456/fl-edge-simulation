@@ -11,6 +11,21 @@ class RandomPolicy(Policy):
         super().__init__(client_id, columns)
         self.num_share = 0.1
 
+
+    def _compute_samples_to_share(self, samples: pd.DataFrame):
+        samples = super()._compute_samples_to_share(samples)
+
+        NG = self._get_neighbours()
+        share_dict = dict()
+        for ng in NG:
+            df_ = samples[samples["client_id"] == self.client_id]  # only share local
+            df_ = df_.groupby("class", group_keys=False).apply(
+                lambda x: x.sample(frac=self.num_share, replace=True)
+            )
+            df_ = df_.drop_duplicates()
+            share_dict[ng] = df_
+        return share_dict
+
     def _compute_policy(
         self, new_samples: pd.DataFrame, received_samples: List[pd.DataFrame]
     ):
@@ -35,16 +50,7 @@ class RandomPolicy(Policy):
         # self.most_recent_store_idx = new_cache[] np.setdiff1d(samples.index, drop_idx)
         # self.most_recent_drop_idx = np.intersect1d(cache.index, drop_idx)
 
-        NG = self._get_neighbours()
-        share_dict = dict()
-        for ng in NG:
-            df_ = samples[samples["client_id"] == self.client_id]  # only share local
-            df_ = df_.groupby("class", group_keys=False).apply(
-                lambda x: x.sample(frac=self.num_share, replace=True)
-            )
-            df_ = df_.drop_duplicates()
-            share_dict[ng] = df_
 
-        self.most_recent_share_dict = share_dict
+        self.most_recent_share_dict = self._compute_samples_to_share(samples) 
 
         return samples

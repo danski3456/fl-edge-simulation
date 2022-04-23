@@ -68,6 +68,9 @@ class Policy(ABC):
 
         return availability
 
+    def _compute_samples_to_share(self, samples: pd.DataFrame):
+        return pd.concat([samples, self.cache], axis=0)
+
     def _get_neighbours(self):
 
         topology = st.TOPOLOGY

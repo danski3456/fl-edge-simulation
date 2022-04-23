@@ -26,61 +26,61 @@ stages:
       size: 133089540
       nfiles: 16
     - path: src/setup/generate_assignment.py
-      md5: 4196d13c38c9921d774b18d31ad599b6
-      size: 2398
+      md5: 1edf8d70d687c2d694518323897f3f48
+      size: 2496
     params:
       params.yaml:
         arrival_rate:
           type: constant
-          quantity: 100
+          quantity: 1
         dataset_name: mnist
         iid: false
-        num_clients: 6
-        timeslots: 70
+        num_clients: 3
+        timeslots: 1
     outs:
     - path: assets/original_assignment/mnist/original_assignment.csv
-      md5: d1ccab9d224c84dfa2051619460fbd06
-      size: 530291
+      md5: 3cdf3dbc03983f36c434a92325fa22c7
+      size: 72
   final_assignment:
     cmd: python src/policies/apply.py
     deps:
     - path: assets/original_assignment/mnist/
-      md5: 984eda1a8e8134ccb7129b12e42bc03d.dir
-      size: 530316
+      md5: dd454f72cbedec8a1d78b729d528ae18.dir
+      size: 97
       nfiles: 2
     - path: src/policies/
-      md5: 9c4043ca79627cb2d21a847c368dd9bb.dir
-      size: 19758
+      md5: 157f376fe10cda8185c0c897af69636c.dir
+      size: 21925
       nfiles: 11
     params:
       params.yaml:
         cache_capacity:
           type: constant
-          quantity: 500
+          quantity: 500000
         dataset_name: mnist
         fl_rounds:
           type: all
           freq: 1
-        max_resources: 1000
-        num_clients: 6
+        max_resources: 100000
+        num_clients: 3
         resources:
-          0: first-half
-        timeslots: 70
-        topology: ring
+          placeholder: none
+        timeslots: 1
+        topology: none
     outs:
     - path: assets/final_assignment/mnist/final_assignment.json
-      md5: f239e5d8611a8d9adb470c9f2a7c0b2a
-      size: 589873
+      md5: 444ece3c0107d6deb9900c1b819fe15f
+      size: 130
   simulate:
     cmd: python src/simulations/federated_learning.py && python src/simulations/central_server.py
     deps:
     - path: assets/final_assignment/mnist/
-      md5: 9a1a77a98d49c18a3f0d7df78e995bff.dir
-      size: 589896
+      md5: 6b3b10b56cdc7ef7428b76d2b4a297e6.dir
+      size: 716138
       nfiles: 2
     - path: src/flower/
-      md5: 7385b6320abc622124f5b92ce6c44817.dir
-      size: 10131
+      md5: c2b5a7ac80ca6f73682a3083427bfc65.dir
+      size: 10518
       nfiles: 4
     - path: src/simulations/
       md5: 5e26e8ee1b6601881655b784360b7e5a.dir
@@ -96,11 +96,11 @@ stages:
         num_clients: 6
     outs:
     - path: assets/metrics/train
-      md5: 0c461a7494b131cb9d1f79b5af39e426.dir
-      size: 102262
+      md5: a1742a20c2e4f380290f9ba00960a9f8.dir
+      size: 15907
       nfiles: 8
     - path: assets/models/
-      md5: bec87ce935debec047e707d73a17c064.dir
+      md5: a2bb96e4edfb34fad69e237e93d5f9e6.dir
       size: 234452
       nfiles: 2
   report:

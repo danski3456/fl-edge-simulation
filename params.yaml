@@ -1,21 +1,26 @@
 dataset_name: mnist
+num_classes: 10
 iid: False
 seed: 42
-num_clients: 6
-timeslots: 70
+num_clients: 3
+timeslots: 1
 arrival_rate:
   type: constant
-  quantity: 100
+  quantity: 1
 cache_capacity: 
   type: constant
-  quantity: 500
+  quantity: 500000
 fl_rounds: 
   type: all
   freq: 1
-policies: random
-max_resources: 1000 # each client can process 1000 samples at max
+policies: sfifo
+max_resources: 100000 # each client can process 1000 samples at max
 resources:
-  # placeholder: none
-  0: "first-half"
+  placeholder: none
+  # 0: "first-half"
 model_name: mnist_conv
-topology: ring
+topology: none
+optimal_data_sharing:
+  mode: "no_sharing"
+  topology: "ring"
+  edge_capacity: 1000

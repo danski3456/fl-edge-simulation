@@ -88,6 +88,8 @@ if __name__ == "__main__":
     df_assignment = generate_distribution(dataset)
 
     # %%
+    if st.OPTIMAL_DATA_SHARING["mode"] == "no_sharing":
+        df_assignment["arrival_time"] = 0
 
     df_assignment.to_csv(path, index=False)
 
