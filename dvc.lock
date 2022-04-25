@@ -4,8 +4,8 @@ stages:
     cmd: python src/setup/download_dataset.py
     deps:
     - path: src/datasets
-      md5: 9cdb11c7ca579cf4b83c02b69273ef48.dir
-      size: 9770
+      md5: 2b0d12b1d449603e806f279c71d95bdc.dir
+      size: 9676
       nfiles: 6
     - path: src/setup/download_dataset.py
       md5: 1f33bd10e776c5ab04e875d1799e55dc
@@ -15,43 +15,47 @@ stages:
         dataset_name: mnist
     outs:
     - path: assets/raw_datasets/mnist
-      md5: ef50dfefcc25e2e7865d16dfc852a4f2.dir
-      size: 133089540
-      nfiles: 16
+      md5: 433c86703301f4aa5219ff51e391b3d1.dir
+      size: 243973592
+      nfiles: 20
   original_assignment:
     cmd: python src/setup/generate_assignment.py
     deps:
     - path: assets/raw_datasets/mnist
-      md5: ef50dfefcc25e2e7865d16dfc852a4f2.dir
-      size: 133089540
-      nfiles: 16
+      md5: 433c86703301f4aa5219ff51e391b3d1.dir
+      size: 243973592
+      nfiles: 20
     - path: src/setup/generate_assignment.py
-      md5: 1edf8d70d687c2d694518323897f3f48
-      size: 2496
+      md5: 4597252257ff3e356de098e73a2059af
+      size: 3622
     params:
       params.yaml:
         arrival_rate:
           type: constant
-          quantity: 1
+          quantity: 100
         dataset_name: mnist
         iid: false
-        num_clients: 3
-        timeslots: 1
+        num_clients: 9
+        optimal_data_sharing:
+          topology: ring
+          edge_capacity: 1000
+          multi-timeslot: false
+        timeslots: 50
     outs:
     - path: assets/original_assignment/mnist/original_assignment.csv
-      md5: 3cdf3dbc03983f36c434a92325fa22c7
-      size: 72
+      md5: e899ace13740e507daaf1d9658e52307
+      size: 635489
   final_assignment:
     cmd: python src/policies/apply.py
     deps:
     - path: assets/original_assignment/mnist/
-      md5: dd454f72cbedec8a1d78b729d528ae18.dir
-      size: 97
+      md5: ac8c867f3d2f4e57b51df6c071459e99.dir
+      size: 635514
       nfiles: 2
     - path: src/policies/
-      md5: 157f376fe10cda8185c0c897af69636c.dir
-      size: 21925
-      nfiles: 11
+      md5: 24e65df0fc5b9ac8a232895bf6684fc5.dir
+      size: 19301
+      nfiles: 9
     params:
       params.yaml:
         cache_capacity:
@@ -62,30 +66,30 @@ stages:
           type: all
           freq: 1
         max_resources: 100000
-        num_clients: 3
+        num_clients: 9
         resources:
           placeholder: none
-        timeslots: 1
+        timeslots: 50
         topology: none
     outs:
     - path: assets/final_assignment/mnist/final_assignment.json
-      md5: 444ece3c0107d6deb9900c1b819fe15f
-      size: 130
+      md5: cf1cc1cd64a95207672343f90672a09f
+      size: 23784329
   simulate:
     cmd: python src/simulations/federated_learning.py && python src/simulations/central_server.py
     deps:
     - path: assets/final_assignment/mnist/
-      md5: 6b3b10b56cdc7ef7428b76d2b4a297e6.dir
-      size: 716138
+      md5: 7798db8385b5e0ba14f55e1ec2a573b0.dir
+      size: 23784352
       nfiles: 2
     - path: src/flower/
-      md5: c2b5a7ac80ca6f73682a3083427bfc65.dir
-      size: 10518
+      md5: ce487286665f2f7e4a2a6e12ce1c8534.dir
+      size: 10384
       nfiles: 4
     - path: src/simulations/
-      md5: 5e26e8ee1b6601881655b784360b7e5a.dir
-      size: 2156748
-      nfiles: 37
+      md5: 5754e4806f95ae52c301b7a1d4df8f5c.dir
+      size: 2401
+      nfiles: 2
     params:
       params.yaml:
         dataset_name: mnist
@@ -93,14 +97,14 @@ stages:
           type: all
           freq: 1
         model_name: mnist_conv
-        num_clients: 6
+        num_clients: 9
     outs:
     - path: assets/metrics/train
-      md5: a1742a20c2e4f380290f9ba00960a9f8.dir
-      size: 15907
-      nfiles: 8
+      md5: 8e34e1c5ff619e2d656d7f5d93ffb99f.dir
+      size: 103835
+      nfiles: 11
     - path: assets/models/
-      md5: a2bb96e4edfb34fad69e237e93d5f9e6.dir
+      md5: c0c1ad8c9a27d4f4c017afe22cba36d1.dir
       size: 234452
       nfiles: 2
   report:
@@ -108,25 +112,25 @@ stages:
       && python src/reports/confusion_matrix.py
     deps:
     - path: assets/metrics/train
-      md5: 0c461a7494b131cb9d1f79b5af39e426.dir
-      size: 102262
-      nfiles: 8
+      md5: 8e34e1c5ff619e2d656d7f5d93ffb99f.dir
+      size: 103835
+      nfiles: 11
     - path: src/reports
-      md5: cb5f1aaa5f98228262d3a5228ae0dce9.dir
-      size: 9208
-      nfiles: 41
+      md5: 2b4d46aaa669d0bf68c19afa6d0057ab.dir
+      size: 6442
+      nfiles: 3
     params:
       params.yaml:
         dataset_name: mnist
-        num_clients: 6
+        num_clients: 9
     outs:
     - path: assets/metrics/test/central/metrics.json
-      md5: 54a7e79e8d3235e5e86cc7336fb439ff
+      md5: a42cfdec26a8c9bc723143598789c352
       size: 39
     - path: assets/metrics/test/federated/metrics.json
-      md5: fff0ecf997f0aca461b7129ca17275c5
-      size: 36
+      md5: 171f5e49cd95940fe3df31ca331a45f1
+      size: 39
     - path: assets/reports/images/mnist
-      md5: d111eef9c06b080e69773cab2fcadc4c.dir
-      size: 398762
+      md5: 3c8361ca1751ff0dc17bc1c9e0193059.dir
+      size: 302706
       nfiles: 6

@@ -1,12 +1,13 @@
 dataset_name: mnist
 num_classes: 10
 iid: False
+iid_score: 10
 seed: 42
-num_clients: 3
-timeslots: 1
+num_clients: 9
+timeslots: 50
 arrival_rate:
   type: constant
-  quantity: 1
+  quantity: 100
 cache_capacity: 
   type: constant
   quantity: 500000
@@ -21,6 +22,6 @@ resources:
 model_name: mnist_conv
 topology: none
 optimal_data_sharing:
-  mode: "no_sharing"
   topology: "ring"
   edge_capacity: 1000
+  multi-timeslot: False

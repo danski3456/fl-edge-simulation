@@ -21,6 +21,7 @@ stages:
       - num_clients
       - arrival_rate
       - iid
+      - optimal_data_sharing
   final_assignment:
     cmd: python src/policies/apply.py
     deps:

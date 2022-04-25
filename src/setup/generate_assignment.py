@@ -6,6 +6,7 @@ from collections import defaultdict
 from src.datasets.map import name_to_dataset
 from torch.utils.data import Dataset
 from src.path_utils import original_assignment_path
+from src.setup.optimal_sharing import solve_instance
 
 # %%
 
@@ -50,21 +51,43 @@ def generate_distribution(dataset: Dataset) -> pd.DataFrame:
     class_to_client = defaultdict(list)
     C = df["class"].nunique()
     N = st.NUM_CLIENTS
-    if st.IID is False:
-        if C > N:
-            for c in range(C):
-                class_to_client[c % N].append(c)
-        else:
-            for cl in range(N):
-                class_to_client[cl] = cl % C
+
+    sampling_weight = {}
+    for n in range(N):
+        sampling_weight[n] = np.ones(C)
+    if C > N:
+        for c in range(C):
+            sampling_weight[c % N][c] += st.IID_SCORE
     else:
-        for cl in range(N):
-            class_to_client[cl] = list(range(C))
+        for n in range(N):
+            sampling_weight[n][n % C] += st.IID_SCORE
+
+    for n in range(N):
+        sampling_weight[n] = sampling_weight[n] / (sampling_weight[n].sum())
+        sampling_weight[n] = dict((i, v) for i, v in enumerate(sampling_weight[n]))
+
+    # print(sampling_weight)
+
+    # if st.IID is False:
+    #     if C > N:
+    #         for c in range(C):
+    #             class_to_client[c % N].append(c)
+    #     else:
+    #         for cl in range(N):
+    #             class_to_client[cl] = cl % C
+    # else:
+    #     for cl in range(N):
+    #         class_to_client[cl] = list(range(C))
 
     samples_all_clients = []
     for cl in range(st.NUM_CLIENTS):
-        df_ = df[df["class"].isin(class_to_client[cl])]
-        client_samples = df_.sample(samples_per_client[cl], replace=True)
+        # df_ = df[df["class"].isin(class_to_client[cl])]
+        df_ = df.copy()
+        df_["weight"] = df_["class"].map(sampling_weight[cl])
+        client_samples = df_.sample(
+            samples_per_client[cl], replace=True, weights="weight"
+        )
+
         client_timeslots = sum(
             [[t] * ar for ar, t in zip(arrival_rate[:, 0], range(st.TIMESLOTS))], []
         )
@@ -88,9 +111,39 @@ if __name__ == "__main__":
     df_assignment = generate_distribution(dataset)
 
     # %%
-    if st.OPTIMAL_DATA_SHARING["mode"] == "no_sharing":
+
+    if st.OPTIMAL_DATA_SHARING["topology"] != "none":
+
+        class_count = (
+            df_assignment.groupby(["client_id", "class"])["class"].size().to_dict()
+        )
+        for n in range(st.NUM_CLIENTS):
+            for c in range(st.NUM_CLASSES):
+                if (n, c) not in class_count:
+                    class_count[(n, c)] = 0
+
+        optimization_results = solve_instance(class_count)
+
+        shared_rows = []
+        for src, dest, cls, amount in optimization_results["exchanges"]:
+            amount = int(amount)
+            shared_samples = (
+                df_assignment[
+                    (df_assignment["client_id"] == src)
+                    & (df_assignment["class"] == cls)
+                ]
+                .sample(amount)
+                .copy()
+            )
+            shared_samples["client_id"] = dest
+            shared_samples = shared_samples.reset_index(drop=True)
+            shared_rows.append(shared_samples)
+
+        df_assignment = pd.concat([df_assignment] + shared_rows)
+
+    if not st.OPTIMAL_DATA_SHARING["multi-timeslot"]:
+        print("Collapsing to one timeslot")
         df_assignment["arrival_time"] = 0
 
+    # %%
     df_assignment.to_csv(path, index=False)
-
-# %%

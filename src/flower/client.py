@@ -37,7 +37,6 @@ class FlowerClient(fl.client.NumPyClient):
         self.model.set_parameters(parameters)
 
         round = config["round"]
-        print("round", round, len(self.data_loaders))
 
         train_loader = self.data_loaders[round]["train"]
         val_loader = self.data_loaders[round]["val"]
@@ -59,7 +58,7 @@ class FlowerClient(fl.client.NumPyClient):
             # params = [np.zeros_like(x) for x in self.get_parameters()]
             params = self.get_parameters()
 
-        return params, L
+        return params, L, {}
 
     def evaluate(self, parameters, config):
         pass

@@ -18,7 +18,6 @@ from src.policies.base import get_fl_rounds
 if __name__ == "__main__":
 
     FL_ROUNDS = get_fl_rounds()
-    print(FL_ROUNDS)
 
     path = original_assignment_path()
     df = pd.read_csv(path, index_col=None)

@@ -1,5 +1,4 @@
 # %%
-from tkinter import W
 import numpy as np
 import torch
 import pytorch_lightning as pl
@@ -62,9 +61,9 @@ if __name__ == "__main__":
         #     f1s[i] = f1
 
         # %%
+
         assert np.allclose(
-            results[0]["test_acc"],
-            (cf.diag().sum() / cf.sum()).item(),
+            results[0]["test_acc"], (cf.diag().sum() / cf.sum()).item(), atol=1e-2
         )
         # %%
         core_metric = dict(core_metric=model.core_metric(preds, targets).item())
@@ -74,10 +73,11 @@ if __name__ == "__main__":
         # %%
 
         C = cf.shape[0]
-        df_cm = pd.DataFrame(cf, index=range(C), columns=range(C))
+        df_cm = pd.DataFrame(cf.numpy(), index=range(C), columns=range(C))
         fig, ax = plt.subplots(figsize=(8, 4), facecolor=(1, 1, 1))
         g = sns.heatmap(df_cm, annot=True, fmt="g", cmap="Blues", ax=ax)
         fig.tight_layout()
+
         ax.set_title(f"{label} -- Accuracy: {results[0]['test_acc']:.2%}")
         save_image(fig, f"confusion_matrix_{label}.png")
 
