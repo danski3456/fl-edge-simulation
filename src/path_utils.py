@@ -13,6 +13,7 @@ def get_path(folder: str) -> Path:
 
 def original_assignment_path():
     path = Path(st.ROOT_DIR)
+    path /= st.ASSETS_DIR
     path /= st.ORIGINAL_ASSIGNMENT_DIR
     path /= st.DATASET_NAME
     path /= st.ORIGINAL_ASSIGNMENT_FILENAME
@@ -21,6 +22,7 @@ def original_assignment_path():
 
 def final_assignmnet_path():
     path = Path(st.ROOT_DIR)
+    path /= st.ASSETS_DIR
     path /= st.FINAL_ASSIGNMENT_DIR
     path /= st.DATASET_NAME
     path /= st.FINAL_ASSIGNMENT_FILENAME
@@ -29,6 +31,7 @@ def final_assignmnet_path():
 
 def metrics_path(agent_id, train=True):
     path = Path(st.ROOT_DIR)
+    path /= st.ASSETS_DIR
     path /= st.METRICS_DIR
     path /= "train" if train else "test"
     path /= str(agent_id)
@@ -51,6 +54,7 @@ def load_metrics(agent_id, train=True):
 
 def save_image(fig, img_name):
     path = Path(st.ROOT_DIR)
+    path /= st.ASSETS_DIR
     path /= st.IMAGE_DIR
     path /= st.DATASET_NAME
     path /= img_name
@@ -63,6 +67,7 @@ def save_image(fig, img_name):
 def model_path(model_name, dataset_name, fl=True):
     kind = "fl" if fl is True else "central"
     path = Path(st.ROOT_DIR)
+    path /= st.ASSETS_DIR
     path /= st.MODELS_DIR
     path.mkdir(parents=True, exist_ok=True)
     name = f"{model_name}_{dataset_name}_{kind}.npz"

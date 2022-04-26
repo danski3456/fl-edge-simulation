@@ -16,11 +16,14 @@ stages:
     outs:
       - assets/original_assignment/${dataset_name}/original_assignment.csv
     params:
+      - exp_name
       - dataset_name
       - timeslots
       - num_clients
       - arrival_rate
       - iid
+      - iid_score
+      - optimal_data_sharing
   final_assignment:
     cmd: python src/policies/apply.py
     deps:
@@ -29,12 +32,15 @@ stages:
     outs:
       - assets/final_assignment/${dataset_name}/final_assignment.json
     params:
+      - exp_name
       - dataset_name
       - timeslots
       - num_clients
       - fl_rounds
       - cache_capacity
       - topology
+      - resources
+      - max_resources
   simulate:
     cmd: python src/simulations/federated_learning.py && python src/simulations/central_server.py
     deps:
@@ -46,6 +52,7 @@ stages:
       - assets/models/
 
     params:
+      - exp_name
       - dataset_name
       - num_clients
       - fl_rounds
@@ -58,6 +65,7 @@ stages:
     outs:
       - assets/reports/images/${dataset_name}
     params:
+      - exp_name
       - dataset_name
       - num_clients
     metrics:

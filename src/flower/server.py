@@ -1,3 +1,4 @@
+import torch
 import flwr as fl
 import pytorch_lightning as pl
 from typing import Any, Callable, Dict, List, Optional, Tuple
@@ -7,6 +8,7 @@ from src.models.map import name_to_model
 from src.datasets.map import name_to_dataset
 from config import settings as st
 from src.path_utils import save_metrics, save_model
+from src.policies.base import get_fl_rounds
 
 
 def get_on_fit_config_fn() -> Callable[[int], Dict[str, str]]:
@@ -34,15 +36,17 @@ def start_server(*args) -> None:
 
     strategy = fl.server.strategy.FedAvg(
         fraction_fit=1,
-        min_fit_clients=st.NUM_CLIENTS,
-        min_available_clients=st.NUM_CLIENTS,
+        min_fit_clients=st.NUM_CLIENTS - 1,
+        min_available_clients=st.NUM_CLIENTS - 1,
         on_fit_config_fn=get_on_fit_config_fn(),
         eval_fn=get_eval_fn(model),
     )
 
+    num_fl_rounds = len(get_fl_rounds())
+
     history = fl.server.start_server(
         server_address="[::]:8080",
-        config={"num_rounds": len(st.FL_ROUNDS)},
+        config={"num_rounds": num_fl_rounds},
         strategy=strategy,
     )
 
@@ -64,9 +68,17 @@ def get_eval_fn(model):
         trainer = pl.Trainer(accelerator="auto", devices="auto")
         results = trainer.test(model, dataloader)
         loss = results[-1]["test_loss"]
-        # model.set_weights(weights)  # Update model with the latest parameters
-        # loss, accuracy = model.evaluate(x_val, y_val)
-        return loss, results[0]
+
+        preds = []
+        targets = []
+        for batch_idx, batch in enumerate(dataloader):
+            targets.append(batch[1])
+            preds.append(model.predict_step(batch, batch_idx))
+        # %%
+        preds, targets = torch.cat(preds), torch.cat(targets)
+        f1s = model._get_f1s(preds, targets)
+
+        return loss, {**results[0], **f1s}
 
     return evaluate
 

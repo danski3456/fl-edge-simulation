@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <title>DVC Plot</title>
+    
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    
+</head>
+<body>
+    
+    <div id = "plot_pcp">
+        <script type = "text/javascript">
+            var plotly_data = {"data": [{"type": "parcoords", "dimensions": [{"label": "Experiment", "values": [1, 0], "tickvals": [1, 0], "ticktext": ["workspace", "feature-limited-resources"]}, {"label": "assets/metrics/test/central/metrics.json:core_metric", "values": [0.9752, null]}, {"label": "assets/metrics/test/federated/metrics.json:core_metric", "values": [0.99178, null]}, {"label": "iid_score", "values": [1.0, null]}, {"label": "num_clients", "values": [9.0, 3.0]}, {"label": "timeslots", "values": [50.0, 1.0]}, {"label": "arrival_rate.quantity", "values": [100.0, 1.0]}, {"label": "optimal_data_sharing.topology", "values": [0, 1], "tickvals": [0, 1], "ticktext": ["none", "ring"]}, {"label": "optimal_data_sharing.multi-timeslot", "values": [0, 1], "tickvals": [0, 1], "ticktext": ["False", "Missing"]}, {"label": "optimal_data_sharing.mode", "values": [1, 0], "tickvals": [1, 0], "ticktext": ["Missing", "no_sharing"]}, {"label": "assets/final_assignment/mnist/", "values": [1, 0], "tickvals": [1, 0], "ticktext": ["d121ba1", "6b3b10b"]}, {"label": "assets/metrics/train", "values": [1, 0], "tickvals": [1, 0], "ticktext": ["9760d80", "0c461a7"]}, {"label": "assets/original_assignment/mnist/", "values": [0, 1], "tickvals": [0, 1], "ticktext": ["48c0ab4", "dd454f7"]}, {"label": "assets/raw_datasets/mnist", "values": [0, 1], "tickvals": [0, 1], "ticktext": ["433c867", "ef50dfe"]}, {"label": "src/datasets", "values": [0, 1], "tickvals": [0, 1], "ticktext": ["2b0d12b", "9cdb11c"]}, {"label": "src/flower/", "values": [0, 1], "tickvals": [0, 1], "ticktext": ["25d4980", "c2b5a7a"]}, {"label": "src/policies/", "values": [1, 0], "tickvals": [1, 0], "ticktext": ["24e65df", "157f376"]}, {"label": "src/reports", "values": [0, 1], "tickvals": [0, 1], "ticktext": ["2b4d46a", "cb5f1aa"]}, {"label": "src/setup/generate_assignment.py", "values": [1, 0], "tickvals": [1, 0], "ticktext": ["5f81096", "1edf8d7"]}, {"label": "src/simulations/", "values": [0, 1], "tickvals": [0, 1], "ticktext": ["5754e48", "5e26e8e"]}], "line": {"color": [1, 0], "showscale": true, "colorbar": {"title": "Experiment", "tickmode": "array", "tickvals": [1, 0], "ticktext": ["workspace", "feature-limited-resources"]}}}], "layout": {}};
+            Plotly.newPlot("plot_pcp", plotly_data.data, plotly_data.layout);
+        </script>
+    </div>
+    
+</body>
+</html>

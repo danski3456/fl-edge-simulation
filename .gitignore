@@ -5,3 +5,4 @@ lightning_logs
 
 __pycache__
 .env
+infrastructure/gurobi.lic

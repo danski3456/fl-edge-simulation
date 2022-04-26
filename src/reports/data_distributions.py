@@ -41,11 +41,13 @@ df = pd.concat(df_all).reset_index(drop=True)
 
 
 # %%
-fig, axes = plt.subplots(2, 3, figsize=(14, 10), sharex=True, sharey=True)
+fig, axes = plt.subplots(
+    (st.NUM_CLIENTS // 3) + 1, 3, figsize=(14, 10), sharex=True, sharey=True
+)
 unique_classes = sorted(df["class"].unique())
 
 
-for i in range(6):
+for i in range(st.NUM_CLIENTS):
 
     ax = axes[i // 3, i % 3]
     # i = 0
@@ -60,7 +62,6 @@ for i in range(6):
         for x in rounds:
             if x not in height:
                 height.update({x: 0})
-        print(i, c, height)
         yy = np.array([height[x] for x in rounds]) / totals
         ax.bar(rounds, yy, width=1, bottom=cant_rounds, align="edge")
         cant_rounds += yy

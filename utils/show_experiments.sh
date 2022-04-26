@@ -1,0 +1,1 @@
+dvc exp show --drop "src/*|assets/*|dataset_name|num_classes|iid|seed|arrival_rate*|cache_capacity*|fl_rounds*|policies|max_resources|resources*|model_name|topology|optimal_data_sharing.multi-timeslot|optimal_data_sharing.mode" --keep "assets/metrics/test/*|iid_score"

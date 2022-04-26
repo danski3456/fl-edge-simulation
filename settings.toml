@@ -1,14 +1,16 @@
 raw_datasets="assets/raw_datasets"
 
-final_assignment_dir="assets/final_assignment"
+assets_dir="assets"
+
+final_assignment_dir="final_assignment"
 final_assignment_filename = "final_assignment.json"
 
-original_assignment_dir="assets/original_assignment"
+original_assignment_dir="original_assignment"
 original_assignment_filename = "original_assignment.csv"
 
-metrics_dir = "assets/metrics"
+metrics_dir = "metrics"
 metrics_filename = "metrics.json"
 
-image_dir = "assets/reports/images"
+image_dir = "reports/images"
 
-models_dir = "assets/models"
+models_dir = "models"

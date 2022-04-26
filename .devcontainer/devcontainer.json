@@ -6,13 +6,20 @@
 	"context": "..",
 	// Update the 'dockerFile' property if you aren't using the standard 'Dockerfile' filename.
 	"dockerFile": "../infrastructure/Dockerfile",
-	"runArgs": [
-		"--gpus=all"
-	],
+	// "build": {
+	// 	"args": {
+	// 		"IMAGEFILE": "python:3.8"
+	// 	}
+	// },
+	// "runArgs": [
+	// 	"--gpus",
+	// 	"device=0"
+	// ],
 	// Set *default* container specific settings.json values on container create.
-	"settings": {},
+	"settings": {
+		"python.defaultInterpreterPath": "/usr/bin/python3.7",
+	},
 	// Add the IDs of extensions you want installed when the container is created.
-	"extensions": [],
 	"workspaceMount": "source=${localWorkspaceFolder}/,target=/workspace,type=bind",
 	"workspaceFolder": "/workspace",
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
@@ -25,4 +32,9 @@
 	// "mounts": [ "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind" ],
 	// Uncomment to connect as a non-root user if you've added one. See https://aka.ms/vscode-remote/containers/non-root.
 	// "remoteUser": "vscode"
+	"extensions": [
+		"ms-python.python",
+		"ms-python.vscode-pylance",
+		"christian-kohler.path-intellisense"
+	]
 }

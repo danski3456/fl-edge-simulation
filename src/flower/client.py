@@ -5,6 +5,7 @@ import pytorch_lightning as pl
 from collections import OrderedDict
 
 from config import settings as st
+from copy import deepcopy
 
 import json
 import torch
@@ -36,18 +37,28 @@ class FlowerClient(fl.client.NumPyClient):
         self.model.set_parameters(parameters)
 
         round = config["round"]
-        print("round", round, len(self.data_loaders))
 
         train_loader = self.data_loaders[round]["train"]
         val_loader = self.data_loaders[round]["val"]
-        trainer = pl.Trainer(
-            max_epochs=1, accelerator="auto", devices="auto", callbacks=[self.metrics_callback])
-        trainer.fit(self.model, train_loader)
-        trainer.validate(self.model, dataloaders=val_loader)
+        L = len(train_loader.sampler)
 
-        self.metrics_callback.persist_round(round)
+        if L > 0:
+            trainer = pl.Trainer(
+                max_epochs=1,
+                accelerator="auto",
+                devices="auto",
+                callbacks=[self.metrics_callback],
+            )
+            trainer.fit(self.model, train_loader)
+            trainer.validate(self.model, dataloaders=val_loader)
 
-        return self.get_parameters(), len(train_loader.sampler), {}
+            self.metrics_callback.persist_round(round)
+            params = self.get_parameters()
+        else:
+            # params = [np.zeros_like(x) for x in self.get_parameters()]
+            params = self.get_parameters()
+
+        return params, L, {}
 
     def evaluate(self, parameters, config):
         pass

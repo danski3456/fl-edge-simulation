@@ -32,11 +32,14 @@ if __name__ == "__main__":
     for k, v in assignment_order.items():
         for round, items in v.items():
             idx_samples[round].extend(items)
+
     # %%
 
     loaders = dataset.client_loader(idx_samples)
     # %%
-    trainer = pl.Trainer(accelerator="auto", devices="auto", max_epochs=1, callbacks=[metrics])
+    trainer = pl.Trainer(
+        accelerator="auto", devices="auto", max_epochs=1, callbacks=[metrics]
+    )
     results = []
     for round, loader in loaders.items():
         result = trainer.fit(model, loader["train"], loader["val"])

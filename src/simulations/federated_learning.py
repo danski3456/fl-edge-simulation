@@ -32,7 +32,5 @@ def run_simulation():
         p.join()
 
 
-
 if __name__ == "__main__":
     results = run_simulation()
-    print(results)
