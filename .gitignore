@@ -1,8 +1,7 @@
-
-# Ignore dynaconf secret files
-.secrets.*
-lightning_logs
-
-__pycache__
 .env
+.ipynb_checkpoints
+.secrets.*
+.venv
+__pycache__
 infrastructure/gurobi.lic
+lightning_logs
